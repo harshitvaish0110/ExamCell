@@ -26,15 +26,25 @@ export default function Login() {
     
     try {
       // TODO: Replace with your actual API endpoint
-      const response = await fetch('http://localhost:3000/api/send-otp', {
+      const response = await fetch('http://localhost:8080/api/request-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ rollno: formData.rollno }),
+        body: JSON.stringify({ email: formData.rollno+"@iiitl.ac.in" }),
       });
 
       if (!response.ok) {
+        throw new Error('Failed to send OTP');
+      }
+
+      // console.log(response);
+
+      const data = await response.text();
+
+      console.log(data);
+
+      if (data.success == false) {
         throw new Error('Failed to send OTP');
       }
 
@@ -52,13 +62,13 @@ export default function Login() {
     setError("");
     
     try {
-      const response = await fetch('http://localhost:3000/api/verify-otp', {
+      const response = await fetch('http://localhost:8080/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          rollno: formData.rollno,
+          email: formData.rollno+"@iiitl.ac.in",
           otp: formData.otp,
         }),
       });
@@ -131,7 +141,7 @@ export default function Login() {
               <Input
                 id="rollno"
                 type="text"
-                placeholder="e.g., LCS202301"
+                placeholder="e.g., LCS2024039"
                 value={formData.rollno}
                 onChange={(e) => {
                   setFormData({ ...formData, rollno: e.target.value });
@@ -232,7 +242,7 @@ export default function Login() {
               </Button>
             )}
             <div className="text-center text-sm text-muted-foreground">
-              Don't have an account?{" "}
+              Cannot Login ?{" "}
               <a href="#" className="text-primary hover:text-primary/90 transition-colors font-medium">
                 Contact Admin
               </a>

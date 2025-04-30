@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.login.services.UserService;
 import com.login.models.JwtResponse;
+import com.login.models.OtpResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,12 +66,14 @@ public class UserController {
     }
 
     @PostMapping("/request-otp")
-    public ResponseEntity<String> requestLoginOtp(@RequestBody OtpRequest request) {
+    public ResponseEntity<OtpResponse> requestLoginOtp(@RequestBody OtpRequest request) {
         boolean otpSent = userService.sendLoginOtp(request.getEmail());
         if (otpSent) {
-            return ResponseEntity.ok("OTP sent to your email for login.");
+            OtpResponse response = new OtpResponse(true, "OTP sent to your email for login.", request.getEmail());
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to send OTP.");
+            OtpResponse response = new OtpResponse(false, "Failed to send OTP.", request.getEmail());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
     
@@ -81,17 +84,20 @@ public class UserController {
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<OtpResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        OtpResponse response = new OtpResponse(false, errorMessage, null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericExceptions(Exception ex) {
+    public ResponseEntity<OtpResponse> handleGenericExceptions(Exception ex) {
         String errorMessage = ex.getMessage();
         if (errorMessage != null && errorMessage.contains("Email")) {
-            return new ResponseEntity<>("Invalid email format. Email must end with @iiitl.ac.in", HttpStatus.BAD_REQUEST);
+            OtpResponse response = new OtpResponse(false, "Invalid email format. Email must end with @iiitl.ac.in", null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("An error occurred: " + errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        OtpResponse response = new OtpResponse(false, "An error occurred: " + errorMessage, null);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

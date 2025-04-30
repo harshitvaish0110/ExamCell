@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.login.services.UserService;
@@ -15,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
 public class UserController {
 
@@ -65,29 +67,37 @@ public class UserController {
         }
     }
 
-    @PostMapping("/request-otp")
+    @PostMapping(value = "/request-otp", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OtpResponse> requestLoginOtp(@RequestBody OtpRequest request) {
         boolean otpSent = userService.sendLoginOtp(request.getEmail());
         if (otpSent) {
             OtpResponse response = new OtpResponse(true, "OTP sent to your email for login.", request.getEmail());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
         } else {
             OtpResponse response = new OtpResponse(false, "Failed to send OTP.", request.getEmail());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
         }
     }
     
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JwtResponse> loginWithOtp(@RequestBody LoginRequest request) {
         JwtResponse response = userService.authenticateUserWithOtp(request.getEmail(), request.getOtp());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<OtpResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         OtpResponse response = new OtpResponse(false, errorMessage, null);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
     
     @ExceptionHandler(Exception.class)
@@ -95,9 +105,13 @@ public class UserController {
         String errorMessage = ex.getMessage();
         if (errorMessage != null && errorMessage.contains("Email")) {
             OtpResponse response = new OtpResponse(false, "Invalid email format. Email must end with @iiitl.ac.in", null);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
         }
         OtpResponse response = new OtpResponse(false, "An error occurred: " + errorMessage, null);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 }

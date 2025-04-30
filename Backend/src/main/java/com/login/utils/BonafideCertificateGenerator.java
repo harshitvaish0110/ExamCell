@@ -1,4 +1,4 @@
-package com.example.bonafide;
+package com.login.utils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

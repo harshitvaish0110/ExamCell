@@ -8,6 +8,8 @@ import ManageUsersPage from "./pages/ManageUsersPage"
 import CertificateRequestsPage from "./pages/CertificateRequestsPage"
 import TemplatesPage from "./pages/TemplatesPage"
 import GeneratedCertificatesPage from "./pages/GeneratedCertificatesPage"
+import History from "./pages/History";
+import InputForm from "./pages/InputForm";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
           <Route path="/certificate-requests" element={<CertificateRequestsPage />} />
           <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/generated-certificates" element={<GeneratedCertificatesPage />} />
+          <Route path="/History" element={<History/>} />
+          <Route path="/inputform" element={<InputForm />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

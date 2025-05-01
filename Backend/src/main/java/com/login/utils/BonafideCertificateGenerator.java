@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BonafideCertificateGenerator {
-    private static final String PDF_DIR = "pdf";
+    private static final String PDF_DIR = "Backend/assets/pdf";
     private static final Random random = new Random();
 
     private String generateCertificateNumber() {
@@ -78,7 +78,7 @@ public class BonafideCertificateGenerator {
 
             // Add college logo
             try {
-                Image logo = new Image(ImageDataFactory.create("logo.png"));
+                Image logo = new Image(ImageDataFactory.create("Backend/assets/logo.png"));
                 logo.setWidth(100); 
                 logo.setHeight(100);
                 logo.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -102,7 +102,7 @@ public class BonafideCertificateGenerator {
             document.add(new Paragraph("\nTo whom it May Concern").setBold().setFontSize(13).setTextAlignment(TextAlignment.CENTER));
 
             String line1 = "This is to certify that Mr./Ms. " + studentName + " bearing";
-            String line2 = "Enrollment Number " + enrollmentNumber.toUpperCase() + " is a bonafide student of B.Tech. (" + course + ").";
+            String line2 = "Enrollment Number " + enrollmentNumber.toUpperCase() + " is a bonafide student of B.Tech. (" + course + ")";
             String line3 = "Currently he/she is a student of " + semester + " Semester.";
             String line4 = "This certificate is being issued for the purpose of " + purpose + ".";
 

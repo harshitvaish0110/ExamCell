@@ -1,9 +1,18 @@
 package com.login.models;
+import jakarta.persistence.*;
+import lombok.Builder.Default;
 
+@Entity
+@Table(name = "otp_response")
 public class OtpResponse {
+    @Column(name = "success", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean success;
+    @Column(name = "message")
     private String message;
+    @Id
+    @Column(name = "email", unique = true)
     private String email;
+
     
     public OtpResponse() {
     }

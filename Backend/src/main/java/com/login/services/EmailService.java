@@ -64,29 +64,29 @@ public class EmailService {
         }
     }
     
-    private String extractName(String email) {
-        // Extract name from email if possible, otherwise use default
-        if (email != null && email.contains("@")) {
-            String username = email.substring(0, email.indexOf('@'));
-            // Convert format like "john.doe" to "John Doe"
-            if (username.contains(".")) {
-                String[] parts = username.split("\\.");
-                StringBuilder nameBuilder = new StringBuilder();
-                for (String part : parts) {
-                    if (part.length() > 0) {
-                        nameBuilder.append(Character.toUpperCase(part.charAt(0)))
-                                  .append(part.substring(1))
-                                  .append(" ");
-                    }
-                }
-                return nameBuilder.toString().trim();
-            } else {
-                // Just capitalize the first letter
-                if (username.length() > 0) {
-                    return Character.toUpperCase(username.charAt(0)) + username.substring(1);
-                }
-            }
-        }
-        return "Student";
-    }
+    // private String extractName(String email) {
+    //     // Extract name from email if possible, otherwise use default
+    //     if (email != null && email.contains("@")) {
+    //         String username = email.substring(0, email.indexOf('@'));
+    //         // Convert format like "john.doe" to "John Doe"
+    //         if (username.contains(".")) {
+    //             String[] parts = username.split("\\.");
+    //             StringBuilder nameBuilder = new StringBuilder();
+    //             for (String part : parts) {
+    //                 if (part.length() > 0) {
+    //                     nameBuilder.append(Character.toUpperCase(part.charAt(0)))
+    //                               .append(part.substring(1))
+    //                               .append(" ");
+    //                 }
+    //             }
+    //             return nameBuilder.toString().trim();
+    //         } else {
+    //             // Just capitalize the first letter
+    //             if (username.length() > 0) {
+    //                 return Character.toUpperCase(username.charAt(0)) + username.substring(1);
+    //             }
+    //         }
+    //     }
+    //     return "Student";
+    // }
 }

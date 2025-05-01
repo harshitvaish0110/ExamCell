@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import com.login.models.User;
 import com.login.models.UserEntity;
 import com.login.models.OtpUtil;
 import com.login.models.JwtUtil;

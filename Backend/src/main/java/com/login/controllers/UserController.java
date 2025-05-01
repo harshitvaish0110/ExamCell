@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +33,6 @@ public class UserController {
         public String getEmail() {
             return email;
         }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
     }
 
     // Request body class for login
@@ -54,16 +49,8 @@ public class UserController {
             return email;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
         public String getOtp() {
             return otp;
-        }
-
-        public void setOtp(String otp) {
-            this.otp = otp;
         }
     }
 

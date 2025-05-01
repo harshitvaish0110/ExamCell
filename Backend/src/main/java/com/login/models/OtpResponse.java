@@ -1,6 +1,5 @@
 package com.login.models;
 import jakarta.persistence.*;
-import lombok.Builder.Default;
 
 @Entity
 @Table(name = "otp_response")

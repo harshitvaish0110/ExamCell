@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bonafide")
@@ -74,5 +75,23 @@ public class BonafideController {
     public ResponseEntity<?> approveCertificate(@PathVariable UUID uid) {
         bonafideService.approveCertificate(uid);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/uid/{rollNo}")
+    public ResponseEntity<?> getCertificatesByRollNo(@PathVariable String rollNo) {
+        try {
+            List<Map<String, Object>> certificates = bonafideService.getCertificatesByRollNo(rollNo);
+            Map<String, Object> response = new HashMap<>();
+            response.put("certificates", certificates);
+            return ResponseEntity.ok(response);
+        } catch (ResponseStatusException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                Map<String, String> response = new HashMap<>();
+                response.put("status", "error");
+                response.put("message", "No certificates found for the given roll number");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            throw e;
+        }
     }
 } 

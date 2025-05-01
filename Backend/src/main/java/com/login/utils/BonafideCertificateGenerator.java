@@ -79,8 +79,8 @@ public class BonafideCertificateGenerator {
             // Add college logo
             try {
                 Image logo = new Image(ImageDataFactory.create("logo.png"));
-                logo.setWidth(100); // Adjust size as needed
-                logo.setHeight(100); // Adjust size as needed
+                logo.setWidth(100); 
+                logo.setHeight(100);
                 logo.setHorizontalAlignment(HorizontalAlignment.CENTER);
                 document.add(logo);
             } catch (Exception e) {
@@ -132,6 +132,7 @@ public class BonafideCertificateGenerator {
         }
     }
 
+    // testing
     // public static void main(String[] args) {
     //     Scanner scanner = new Scanner(System.in);
     //     System.out.print("Enter student's email ID: ");

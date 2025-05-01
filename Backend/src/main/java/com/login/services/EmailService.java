@@ -16,6 +16,7 @@ public class EmailService {
     private JavaMailSender javaMailSender;
 
     public void sendOtpEmail(String to, String otp) {
+        System.out.println("Sending this OTP: " + otp);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Authentication OTP - Indian Institute of Information Technology, Lucknow");

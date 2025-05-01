@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/request-otp", "/api/login").permitAll()
+                .requestMatchers("/api/request-otp", "/api/login", "/api/bonafide/**").permitAll()
                 .anyRequest().authenticated()
             );
         

@@ -94,6 +94,60 @@
   --sidebar-ring: oklch(0.5 0.25 350);
 }
 
+@layer utilities {
+  /* Background utilities */
+  .bg-background { background-color: var(--background); }
+  .bg-foreground { background-color: var(--foreground); }
+  .bg-card { background-color: var(--card); }
+  .bg-popover { background-color: var(--popover); }
+  .bg-primary { background-color: var(--primary); }
+  .bg-secondary { background-color: var(--secondary); }
+  .bg-muted { background-color: var(--muted); }
+  .bg-accent { background-color: var(--accent); }
+  .bg-destructive { background-color: var(--destructive); }
+  .bg-sidebar { background-color: var(--sidebar); }
+
+  /* Text utilities */
+  .text-background { color: var(--background); }
+  .text-foreground { color: var(--foreground); }
+  .text-card-foreground { color: var(--card-foreground); }
+  .text-popover-foreground { color: var(--popover-foreground); }
+  .text-primary { color: var(--primary); }
+  .text-primary-foreground { color: var(--primary-foreground); }
+  .text-secondary { color: var(--secondary); }
+  .text-secondary-foreground { color: var(--secondary-foreground); }
+  .text-muted-foreground { color: var(--muted-foreground); }
+  .text-accent-foreground { color: var(--accent-foreground); }
+  .text-sidebar-foreground { color: var(--sidebar-foreground); }
+  .text-sidebar-primary { color: var(--sidebar-primary); }
+  .text-sidebar-primary-foreground { color: var(--sidebar-primary-foreground); }
+  .text-sidebar-accent { color: var(--sidebar-accent); }
+  .text-sidebar-accent-foreground { color: var(--sidebar-accent-foreground); }
+
+  /* Border utilities */
+  .border-border { border-color: var(--border); }
+  .border-input { border-color: var(--input); }
+  .border-sidebar-border { border-color: var(--sidebar-border); }
+
+  /* Ring utilities */
+  .ring-ring { --tw-ring-color: var(--ring); }
+  .ring-sidebar-ring { --tw-ring-color: var(--sidebar-ring); }
+
+  /* Chart colors (if used in bg/text context) */
+  .bg-chart-1 { background-color: var(--chart-1); }
+  .bg-chart-2 { background-color: var(--chart-2); }
+  .bg-chart-3 { background-color: var(--chart-3); }
+  .bg-chart-4 { background-color: var(--chart-4); }
+  .bg-chart-5 { background-color: var(--chart-5); }
+
+  .text-chart-1 { color: var(--chart-1); }
+  .text-chart-2 { color: var(--chart-2); }
+  .text-chart-3 { color: var(--chart-3); }
+  .text-chart-4 { color: var(--chart-4); }
+  .text-chart-5 { color: var(--chart-5); }
+}
+
+
 @layer base {
   * {
     border-color: var(--border);

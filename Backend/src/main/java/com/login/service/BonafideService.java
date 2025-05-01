@@ -17,6 +17,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class BonafideService {
@@ -119,5 +123,25 @@ public class BonafideService {
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not read the file");
         }
+    }
+
+    public List<Map<String, Object>> getCertificatesByRollNo(String rollNo) {
+        List<BonafideCertificate> certificates = certificateRepository.findAllByEnrollmentNumber(rollNo.toUpperCase());
+        
+        if (certificates.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No certificates found for the given roll number");
+        }
+        
+        return certificates.stream()
+            .map(cert -> {
+                Map<String, Object> certInfo = new HashMap<>();
+                certInfo.put("uid", cert.getUid());
+                certInfo.put("isActive", cert.isActive());
+                certInfo.put("isApproved", cert.isApproved());
+                certInfo.put("generatedAt", cert.getGeneratedAt());
+                certInfo.put("expiresAt", cert.getExpiresAt());
+                return certInfo;
+            })
+            .collect(Collectors.toList());
     }
 } 

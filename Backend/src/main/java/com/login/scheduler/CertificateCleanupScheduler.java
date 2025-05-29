@@ -10,7 +10,7 @@ public class CertificateCleanupScheduler {
     @Autowired
     private BonafideService bonafideService;
 
-    @Scheduled(cron = "0 0 0 * * ?") // Runs at midnight every day
+    @Scheduled(cron = "0 0 0 * * ?")
     public void cleanupExpiredCertificates() {
         bonafideService.deleteExpiredCertificates();
     }

@@ -62,11 +62,6 @@ public class BonafideController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             throw e;
-        } catch (IOException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "error");
-            response.put("message", "Error downloading certificate: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

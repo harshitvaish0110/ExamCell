@@ -13,7 +13,6 @@ public class BonafideResponse {
     private String course;
     private String semester;
     private String purpose;
-    private String filePath;
     private LocalDateTime generatedAt;
     private LocalDateTime expiresAt;
     private boolean isActive;

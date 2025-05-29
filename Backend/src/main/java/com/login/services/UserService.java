@@ -34,7 +34,6 @@ public class UserService {
         
         String otp = OtpUtil.generateOtp();
         
-        // Create or update user in database
         UserEntity userEntity = userRepository.findById(email)
                                 .orElse(new UserEntity());
         userEntity.setEmailId(email);
@@ -51,23 +50,18 @@ public class UserService {
             throw new IllegalArgumentException("Email must end with @iiitl.ac.in");
         }
         
-        // Check if email exists in database
         Optional<UserEntity> userEntityOpt = userRepository.findById(email);
         
         if (userEntityOpt.isPresent()) {
             UserEntity userEntity = userEntityOpt.get();
             
-            // Check if OTP is expired
             if (userEntity.isOtpExpired()) {
                 return new JwtResponse(null, email, "OTP has expired. Please request a new one.");
             }
             
-            // Check OTP from database
             if (userEntity.getOtp() != null && userEntity.getOtp().equals(otp)) {
-                // Clear the OTP after successful authentication
                 userRepository.delete(userEntity);
                 
-                // Generate JWT token
                 String token = jwtUtil.generateToken(email);
                 emailService.sendWelcomeEmail(email);
                 return new JwtResponse(token, email, "Authentication successful!");

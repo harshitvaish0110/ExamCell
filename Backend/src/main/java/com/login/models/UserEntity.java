@@ -51,7 +51,7 @@ public class UserEntity {
     }
     
     public boolean isOtpExpired() {
-        // OTP is valid for 10 minutes
+        
         return LocalDateTime.now().isAfter(otpCreatedAt.plusMinutes(10));
     }
 } 

@@ -1,0 +1,2 @@
+2025-05-03 04:23:02,627 INFO c.l.c.SecurityConfig [restartedMain] Configuring security filter chain
+2025-05-03 04:23:02,627 INFO c.l.c.SecurityConfig [restartedMain] CORS configuration set up

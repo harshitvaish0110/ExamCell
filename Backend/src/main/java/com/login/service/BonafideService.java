@@ -2,7 +2,7 @@ package com.login.service;
 
 import com.login.dto.BonafideResponse;
 import com.login.entity.BonafideCertificate;
-import com.login.repository.BonafideCertificateRepository;
+import com.login.repositories.BonafideCertificateRepository;
 import com.login.utils.BonafideCertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;

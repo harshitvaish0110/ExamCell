@@ -1,4 +1,4 @@
-package com.login.repository;
+package com.login.repositories;
 
 import com.login.entity.BonafideCertificate;
 import org.springframework.data.jpa.repository.JpaRepository;

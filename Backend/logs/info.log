@@ -1,0 +1,61 @@
+2025-05-03 04:17:04,551 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-03 04:17:04,597 INFO o.s.b.StartupInfoLogger [main] Starting LoginApplicationTests using Java 21.0.6 with PID 21532 (started by Hema in C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend)
+2025-05-03 04:17:04,600 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2025-05-03 04:19:43,884 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-03 04:19:43,919 INFO o.s.b.StartupInfoLogger [restartedMain] Starting LoginApplication using Java 21.0.6 with PID 16060 (C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend\target\classes started by Hema in C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend)
+2025-05-03 04:19:43,927 INFO o.s.b.SpringApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2025-05-03 04:19:43,994 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-03 04:19:43,994 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-03 04:20:08,996 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-03 04:20:09,064 INFO o.s.b.StartupInfoLogger [restartedMain] Starting LoginApplication using Java 21.0.6 with PID 31804 (C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend\target\classes started by Hema in C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend)
+2025-05-03 04:20:09,065 INFO o.s.b.SpringApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2025-05-03 04:20:09,126 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-03 04:20:09,126 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-03 04:22:56,007 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-03 04:22:56,055 INFO o.s.b.StartupInfoLogger [restartedMain] Starting LoginApplication using Java 21.0.6 with PID 17600 (C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend\target\classes started by Hema in C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend)
+2025-05-03 04:22:56,063 INFO o.s.b.SpringApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2025-05-03 04:22:56,121 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-03 04:22:56,121 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-03 04:22:57,329 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-03 04:22:57,402 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 64 ms. Found 2 JPA repository interfaces.
+2025-05-03 04:22:58,483 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat initialized with port 8080 (http)
+2025-05-03 04:22:58,505 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-03 04:22:58,506 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting service [Tomcat]
+2025-05-03 04:22:58,510 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-05-03 04:22:58,596 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
+2025-05-03 04:22:58,604 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 2475 ms
+2025-05-03 04:22:59,068 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2025-05-03 04:22:59,515 INFO c.z.h.p.HikariPool [restartedMain] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@101cace0
+2025-05-03 04:22:59,518 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2025-05-03 04:22:59,628 INFO o.h.j.i.u.LogHelper [restartedMain] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-03 04:22:59,720 INFO o.h.Version [restartedMain] HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-05-03 04:22:59,774 INFO o.h.c.i.RegionFactoryInitiator [restartedMain] HHH000026: Second-level cache disabled
+2025-05-03 04:23:00,055 INFO o.s.o.j.p.SpringPersistenceUnitInfo [restartedMain] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-03 04:23:01,230 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [restartedMain] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-03 04:23:01,348 INFO o.s.o.j.AbstractEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-03 04:23:02,596 INFO o.s.b.a.e.w.EndpointLinksResolver [restartedMain] Exposing 2 endpoint(s) beneath base path '/actuator'
+2025-05-03 04:23:02,702 INFO o.s.s.w.DefaultSecurityFilterChain [restartedMain] Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@67538726, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1ac6ce05, org.springframework.security.web.context.SecurityContextHolderFilter@2c3c79a7, org.springframework.security.web.header.HeaderWriterFilter@51dc35c9, org.springframework.web.filter.CorsFilter@7a15a9cc, org.springframework.security.web.authentication.logout.LogoutFilter@7d0e4555, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1da2dfa6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8a8b8f7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@35988ba1, org.springframework.security.web.session.SessionManagementFilter@34538546, org.springframework.security.web.access.ExceptionTranslationFilter@7d64da11, org.springframework.security.web.access.intercept.AuthorizationFilter@249bd2c]
+2025-05-03 04:23:03,524 INFO o.s.b.d.a.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2025-05-03 04:23:03,691 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting ProtocolHandler ["http-nio-8080"]
+2025-05-03 04:23:03,747 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat started on port 8080 (http) with context path ''
+2025-05-03 04:23:03,777 INFO o.s.b.StartupInfoLogger [restartedMain] Started LoginApplication in 8.334 seconds (process running for 8.937)
+2025-05-03 04:32:31,846 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-03 04:32:31,855 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2025-05-03 04:32:31,897 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2025-05-03 04:32:42,566 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2025-05-03 04:32:42,629 INFO o.s.b.StartupInfoLogger [restartedMain] Starting LoginApplication using Java 21.0.6 with PID 27780 (C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend\target\classes started by Hema in C:\Users\Hema\Downloads\kkkkk\ExamCell\Backend)
+2025-05-03 04:32:42,636 INFO o.s.b.SpringApplication [restartedMain] No active profile set, falling back to 1 default profile: "default"
+2025-05-03 04:32:42,696 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-03 04:32:42,696 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-03 04:32:43,964 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-03 04:32:44,037 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 64 ms. Found 2 JPA repository interfaces.
+2025-05-03 04:32:45,034 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat initialized with port 8080 (http)
+2025-05-03 04:32:45,045 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8080"]
+2025-05-03 04:32:45,045 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting service [Tomcat]
+2025-05-03 04:32:45,045 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-05-03 04:32:45,112 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
+2025-05-03 04:32:45,121 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 2415 ms
+2025-05-03 04:32:45,344 INFO o.a.j.l.DirectJDKLog [restartedMain] Stopping service [Tomcat]
+2025-05-03 04:32:45,400 INFO o.s.b.a.l.ConditionEvaluationReportLogger [restartedMain] 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.

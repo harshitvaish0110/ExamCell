@@ -15,7 +15,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/request-otp", "/api/login", "/api/bonafide/**").permitAll()
+                .requestMatchers(
+                    "/api/request-otp", 
+                    "/api/login", 
+                    "/api/bonafide/**", 
+                    "/api/start-whatsapp-chat",
+                    "/api/update-whatsapp",
+                    "/api/verify-whatsapp"
+                ).permitAll()
                 .anyRequest().authenticated()
             );
         

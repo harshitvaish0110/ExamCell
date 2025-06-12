@@ -4,6 +4,8 @@ public class JwtResponse {
     private String token;
     private String email;
     private String message;
+    private boolean hasWhatsAppNumber;
+    private String whatsAppNumber;
 
     public JwtResponse() {
     }
@@ -12,6 +14,15 @@ public class JwtResponse {
         this.token = token;
         this.email = email;
         this.message = message;
+        this.hasWhatsAppNumber = false;
+    }
+
+    public JwtResponse(String token, String email, String message, boolean hasWhatsAppNumber, String whatsAppNumber) {
+        this.token = token;
+        this.email = email;
+        this.message = message;
+        this.hasWhatsAppNumber = hasWhatsAppNumber;
+        this.whatsAppNumber = whatsAppNumber;
     }
 
     public String getToken() {
@@ -36,5 +47,13 @@ public class JwtResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isHasWhatsAppNumber() {
+        return hasWhatsAppNumber;
+    }
+
+    public String getWhatsAppNumber() {
+        return whatsAppNumber;
     }
 } 

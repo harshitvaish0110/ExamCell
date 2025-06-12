@@ -4,30 +4,43 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "otp_response")
 public class OtpResponse {
-    @Column(name = "success", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean success;
+    @Column(name = "mail_success", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean mailSuccess;
+
+    @Column(name = "whatsapp_success", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean whatsappSuccess;
+
     @Column(name = "message")
     private String message;
+
     @Id
     @Column(name = "email", unique = true)
     private String email;
 
-    
     public OtpResponse() {
     }
     
-    public OtpResponse(boolean success, String message, String email) {
-        this.success = success;
+    public OtpResponse(boolean mailSuccess, boolean whatsappSuccess, String message, String email) {
+        this.mailSuccess = mailSuccess;
+        this.whatsappSuccess = whatsappSuccess;
         this.message = message;
         this.email = email;
     }
     
-    public boolean isSuccess() {
-        return success;
+    public boolean isMailSuccess() {
+        return mailSuccess;
     }
     
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setMailSuccess(boolean mailSuccess) {
+        this.mailSuccess = mailSuccess;
+    }
+
+    public boolean isWhatsappSuccess() {
+        return whatsappSuccess;
+    }
+    
+    public void setWhatsappSuccess(boolean whatsappSuccess) {
+        this.whatsappSuccess = whatsappSuccess;
     }
     
     public String getMessage() {

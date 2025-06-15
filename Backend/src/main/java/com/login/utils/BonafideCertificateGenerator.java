@@ -1,7 +1,7 @@
 package com.login.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+// import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -85,7 +85,7 @@ public class BonafideCertificateGenerator {
                 .setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph("(An Institute of National Importance by Act of Parliament, under PPP Mode)")
                 .setFontSize(10).setTextAlignment(TextAlignment.CENTER));
-        document.add(new Paragraph("Chak Ganjaria (C G City), Mastemau, Lucknow - 226002 (U.P.) INDIA").setFontSize(10)
+        document.add(new Paragraph("Chak Ganjaria (C G City), Lucknow - 226002 (U.P.) INDIA").setFontSize(10)
                 .setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph("Email: contact@iiitl.ac.in    website: iiitl.ac.in").setFontSize(10)
                 .setTextAlignment(TextAlignment.CENTER));

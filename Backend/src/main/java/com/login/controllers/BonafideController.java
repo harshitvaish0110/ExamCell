@@ -2,16 +2,19 @@ package com.login.controllers;
 
 import com.login.dto.BonafideRequest;
 import com.login.dto.BonafideResponse;
-import com.login.service.BonafideService;
+import com.login.dto.SignRequest;
+import com.login.entity.BonafideCertificate;
+import com.login.models.JwtUtil;
+import com.login.services.AdminService;
+import com.login.services.BonafideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
-import java.io.IOException;
+// import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.HashMap;
@@ -23,6 +26,12 @@ import java.util.List;
 public class BonafideController {
     @Autowired
     private BonafideService bonafideService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AdminService adminService;
 
     @PostMapping("/generate")
     public ResponseEntity<BonafideResponse> generateCertificate(@RequestBody BonafideRequest request) {
@@ -65,10 +74,20 @@ public class BonafideController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/approve/{uid}")
-    public ResponseEntity<?> approveCertificate(@PathVariable UUID uid) {
-        bonafideService.approveCertificate(uid);
+    @PostMapping("/sign")
+    public ResponseEntity<?> signCertificate(@RequestBody SignRequest request) {
+        Boolean admin = false;
+        Boolean valid = jwtUtil.validateToken(request.getToken(), request.getEmail());
+        if (valid) {
+            admin = adminService.existsByEmail(request.getEmail());
+        }
+        if (!valid || !admin) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "error");
+            response.put("message", "Not Authorized to Sign the Certificate");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+        bonafideService.signCertificate(request.getUid());
         return ResponseEntity.ok().build();
     }
 
@@ -84,6 +103,22 @@ public class BonafideController {
                 Map<String, String> response = new HashMap<>();
                 response.put("status", "error");
                 response.put("message", "No certificates found for the given roll number");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            throw e;
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllCertificates() {
+        try {
+            List<BonafideCertificate> certificates = bonafideService.getAllCertificates();
+            return ResponseEntity.ok(certificates);
+        } catch (ResponseStatusException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                Map<String, String> response = new HashMap<>();
+                response.put("status", "error");
+                response.put("message", "No certificates");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
             throw e;

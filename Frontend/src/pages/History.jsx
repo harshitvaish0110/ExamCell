@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Badge } from "@/components/ui/badge"
-import { Clock, UserRound, AlignLeft, Hash, Info } from "lucide-react"
-import { cn } from "@/lib/utils"
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Clock, UserRound, AlignLeft, Hash, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Footer from "../components/Footer";
 
 const dummyLogs = [
   {
@@ -36,45 +37,45 @@ const dummyLogs = [
     time: "08:15:42 16/02/2024",
     description: "Requested Internship Certificate",
   },
-]
+];
 
 const getStatusTag = (desc) => {
-  if (desc.toLowerCase().includes("requested")) return "Requested"
-  if (desc.toLowerCase().includes("approved")) return "Approved"
-  if (desc.toLowerCase().includes("downloaded")) return "Downloaded"
-  return "Info"
-}
+  if (desc.toLowerCase().includes("requested")) return "Requested";
+  if (desc.toLowerCase().includes("approved")) return "Approved";
+  if (desc.toLowerCase().includes("downloaded")) return "Downloaded";
+  return "Info";
+};
 
 const getStatusColor = (status) => {
   switch (status) {
     case "Requested":
-      return "bg-yellow-200 text-yellow-800"
+      return "bg-yellow-200 text-yellow-800";
     case "Approved":
-      return "bg-green-200 text-green-800"
+      return "bg-green-200 text-green-800";
     case "Downloaded":
-      return "bg-blue-200 text-blue-800"
+      return "bg-blue-200 text-blue-800";
     default:
-      return "bg-gray-200 text-gray-800"
+      return "bg-gray-200 text-gray-800";
   }
-}
+};
 
 const getInitials = (name) =>
   name
     .split(" ")
     .map((n) => n[0])
     .join("")
-    .toUpperCase()
+    .toUpperCase();
 
 const History = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header */}
-      <header className="bg-foreground text-primary-foreground py-12 px-4 shadow-md">
+      <header className="bg-secondary rounded-b-[2.5rem] text-foreground py-12 px-4 shadow-md">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             🕘 History Logs
           </h1>
-          <p className="mt-4 text-sm md:text-lg text-secondary">
+          <p className="mt-4 text-sm md:text-lg text-muted-background">
             Admin view of certificate request logs
           </p>
         </div>
@@ -84,8 +85,8 @@ const History = () => {
       <main className="flex-1 max-w-5xl w-full px-4 py-10 mx-auto">
         <div className="grid gap-6">
           {dummyLogs.map((log, index) => {
-            const status = getStatusTag(log.description)
-            const statusColor = getStatusColor(status)
+            const status = getStatusTag(log.description);
+            const statusColor = getStatusColor(status);
             return (
               <div
                 key={index}
@@ -126,7 +127,7 @@ const History = () => {
                     <span
                       className={cn(
                         "inline-block px-3 py-1 rounded-full text-xs font-medium",
-                        statusColor
+                        statusColor,
                       )}
                     >
                       {status}
@@ -134,45 +135,15 @@ const History = () => {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-foreground text-primary-foreground py-10 mt-12 rounded-t-[2.5rem] shadow-inner">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-4">
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
-            <ul className="space-y-1 text-secondary">
-              <li className="hover:underline cursor-pointer">Dashboard</li>
-              <li className="hover:underline cursor-pointer">Exam Schedule</li>
-              <li className="hover:underline cursor-pointer">Results</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Contact</h3>
-            <ul className="space-y-1 text-secondary">
-              <li>📧 exam@university.edu</li>
-              <li>📱 (123) 456-7890</li>
-              <li>📍 Main Campus</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Resources</h3>
-            <ul className="space-y-1 text-secondary">
-              <li className="hover:underline cursor-pointer">Help Center</li>
-              <li className="hover:underline cursor-pointer">FAQs</li>
-              <li className="hover:underline cursor-pointer">Support</li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-center mt-6 text-xs text-secondary border-t pt-4">
-          © {new Date().getFullYear()} Exam Cell. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default History
+export default History;

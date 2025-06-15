@@ -1,10 +1,17 @@
-import React from "react"
-import { Edit, Trash } from "lucide-react"
+import React from "react";
+import { Edit, Trash } from "lucide-react";
 
-import { Button } from "./ui/button"
-import { Card } from "./ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
-import { Badge } from "./ui/badge"
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import { Badge } from "./ui/badge";
 
 const templates = [
   {
@@ -37,22 +44,24 @@ const templates = [
     lastUpdated: "2023-03-22",
     usedIn: "78 certificates",
   },
-]
+];
 
 export function TemplatesTable() {
   return (
-    <Card className="border-[#4a2639]/20">
+    <Card className="border-primary/20">
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-4">Certificate Templates</h3>
         <div className="rounded-md border">
           <Table>
-            <TableHeader className="bg-[#4a2639]">
+            <TableHeader className="bg-primary">
               <TableRow>
                 <TableHead className="text-[#ffe2f3]">Template Name</TableHead>
                 <TableHead className="text-[#ffe2f3]">Type</TableHead>
                 <TableHead className="text-[#ffe2f3]">Last Updated</TableHead>
                 <TableHead className="text-[#ffe2f3]">Used In</TableHead>
-                <TableHead className="text-right text-[#ffe2f3]">Action</TableHead>
+                <TableHead className="text-right text-[#ffe2f3]">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -60,7 +69,10 @@ export function TemplatesTable() {
                 <TableRow key={template.name}>
                   <TableCell className="font-medium">{template.name}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="bg-pink-100 text-[#4a2639] border-0">
+                    <Badge
+                      variant="outline"
+                      className="bg-pink-100 text-primary border-0"
+                    >
                       {template.type}
                     </Badge>
                   </TableCell>
@@ -85,5 +97,5 @@ export function TemplatesTable() {
         </div>
       </div>
     </Card>
-  )
+  );
 }

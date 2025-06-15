@@ -28,7 +28,7 @@ public class EmailService {
                 + "Regards,\n"
                 + "Examination Cell\n"
                 + "Indian Institute of Information Technology, Lucknow\n"
-                + "Chak Ganjaria, Mastemau, Lucknow - 226002\n"
+                + "Chak Ganjaria (C G City), Lucknow - 226002\n"
                 + "https://iiitl.ac.in");
         
         try {
@@ -51,7 +51,7 @@ public class EmailService {
                 + "Regards,\n"
                 + "Examination Cell\n"
                 + "Indian Institute of Information Technology, Lucknow\n"
-                + "Chak Ganjaria, Mastemau, Lucknow - 226002\n"
+                + "Chak Ganjaria (C G City), Lucknow - 226002\n"
                 + "https://iiitl.ac.in");
         
         try {

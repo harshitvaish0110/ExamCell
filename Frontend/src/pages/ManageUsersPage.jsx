@@ -1,8 +1,8 @@
-import React from "react"
-import { UserManagementPage } from "../components/user-management-page"
+import React from "react";
+import { UserManagementPage } from "../components/user-management-page";
 
 function ManageUsersPage() {
-  return <UserManagementPage />
+  return <UserManagementPage />;
 }
 
-export default ManageUsersPage
+export default ManageUsersPage;

@@ -9,9 +9,26 @@ import lombok.Data;
 public class Student {
     
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String mobileNumber;
+
+    @Column(nullable = false, unique = true)
+    private String rollNumber;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false)
+    private String program;
+
+    @Column(nullable = false)
+    private String course;
+
+    @Column(nullable = false)
+    private String semester;
+
+    @Column(nullable = false)
+    private String purpose;
 } 

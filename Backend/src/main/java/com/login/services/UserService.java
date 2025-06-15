@@ -16,6 +16,7 @@ import com.login.models.OtpUtil;
 import com.login.models.JwtUtil;
 import com.login.models.JwtResponse;
 import com.login.repositories.UserRepository;
+import com.login.entity.Admin;
 import com.login.entity.Student;
 
 @Service
@@ -34,6 +35,9 @@ public class UserService {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private AdminService adminService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -94,6 +98,48 @@ public class UserService {
                     return new JwtResponse(token, email, "Authentication successful!", true, student.getMobileNumber());
                 } else {
                     return new JwtResponse(token, email, "Authentication successful!", false, null);
+                }
+            } else {
+                return new JwtResponse(null, email, "Invalid OTP!");
+            }
+        } else {
+            return new JwtResponse(null, email, "User not found! Please request an OTP first.");
+        }
+    }
+
+    public JwtResponse authenticateAdminWithOtpAndPassword(String email, String password, String otp) {
+        if (!IIITL_EMAIL_PATTERN.matcher(email).matches()) {
+            throw new IllegalArgumentException("Email must end with @iiitl.ac.in");
+        }
+        
+        
+        Optional<UserEntity> userEntityOpt = userRepository.findById(email);
+        
+        if (userEntityOpt.isPresent()) {
+            UserEntity userEntity = userEntityOpt.get();
+            
+            
+            if (userEntity.isOtpExpired()) {
+                return new JwtResponse(null, email, "OTP has expired. Please request a new one.");
+            }
+            
+            
+            if (userEntity.getOtp() != null && userEntity.getOtp().equals(otp)) {
+                
+                userRepository.delete(userEntity);
+
+                Admin admin = adminService.getAdminByEmail(email);
+                if (admin != null) {
+                    Boolean passwordMatches = password.equals(admin.getPassword());
+                    if (!passwordMatches) {
+                        return new JwtResponse(null, email, "Invalid Credentials!");
+                    }
+                    String token = jwtUtil.generateToken(email);
+                    emailService.sendWelcomeEmail(email);
+                    logger.info("Admin logged in successfully: {}", email);
+                    return new JwtResponse(token, email, "Authentication successful!");
+                } else {
+                    return new JwtResponse(null, email, "Invalid Credentials!");
                 }
             } else {
                 return new JwtResponse(null, email, "Invalid OTP!");

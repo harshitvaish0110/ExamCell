@@ -1,8 +1,8 @@
-import React from 'react'
-import { DashboardPage as Dashboard } from "../components/dashboard-page"
+import React from "react";
+import { DashboardPage as Dashboard } from "../components/dashboard-page";
 
 function DashboardPage() {
-  return <Dashboard />
+  return <Dashboard />;
 }
 
-export default DashboardPage
+export default DashboardPage;

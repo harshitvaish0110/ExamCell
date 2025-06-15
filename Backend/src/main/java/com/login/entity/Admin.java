@@ -4,20 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "user_contacts")
+@Table(name = "admins")
 @Data
-public class UserContact {
+public class Admin {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String whatsappNumber;
+    private String password;
 
     @Column(nullable = false)
-    private boolean verified;
+    private String fullName;
+
+    private String mobileNumber;
 } 

@@ -16,5 +16,5 @@ public class BonafideResponse {
     private LocalDateTime generatedAt;
     private LocalDateTime expiresAt;
     private boolean isActive;
-    private boolean isApproved;
+    private boolean isSigned;
 } 

@@ -16,8 +16,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    "/api/validate-token",
                     "/api/request-otp", 
                     "/api/login", 
+                    "/api/students",
+                    "/api/students/**",
+                    "/api/admin/login",
+                    "/api/admin/**",
+                    "/api/bonafide/sign",
                     "/api/bonafide/**", 
                     "/api/start-whatsapp-chat",
                     "/api/update-whatsapp",

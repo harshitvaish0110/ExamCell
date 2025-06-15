@@ -1,8 +1,8 @@
-import React from "react"
-import { TemplatesPage as Templates } from "../components/templates-page"
+import React from "react";
+import { TemplatesPage as Templates } from "../components/templates-page";
 
 function TemplatesPage() {
-  return <Templates />
+  return <Templates />;
 }
 
-export default TemplatesPage
+export default TemplatesPage;

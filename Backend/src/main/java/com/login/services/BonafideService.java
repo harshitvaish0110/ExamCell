@@ -1,4 +1,4 @@
-package com.login.service;
+package com.login.services;
 
 import com.login.dto.BonafideResponse;
 import com.login.entity.BonafideCertificate;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 import java.util.Map;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,9 @@ public class BonafideService {
             String semester, String purpose) {
         String enrollmentNumber = email.split("@")[0].toUpperCase();
         
-        String date = LocalDateTime.now().toString();
-        byte[] pdfBytes = certificateGenerator.generateCertificate(studentName, enrollmentNumber, course, 
-            semester, purpose, date);
+        // String date = LocalDateTime.now().toString();
+        // byte[] pdfBytes = certificateGenerator.generateCertificate(studentName, enrollmentNumber, course, 
+        //     semester, purpose, date);
         
         BonafideCertificate certificate = new BonafideCertificate();
         certificate.setStudentName(studentName);
@@ -44,7 +45,7 @@ public class BonafideService {
         certificate.setGeneratedAt(LocalDateTime.now());
         certificate.setExpiresAt(LocalDateTime.now().plusDays(30));
         certificate.setActive(true);
-        certificate.setApproved(false);
+        certificate.setSigned(false);
         
         certificate = certificateRepository.save(certificate);
         return convertToResponse(certificate);
@@ -62,14 +63,14 @@ public class BonafideService {
         response.setGeneratedAt(certificate.getGeneratedAt());
         response.setExpiresAt(certificate.getExpiresAt());
         response.setActive(certificate.isActive());
-        response.setApproved(certificate.isApproved());
+        response.setSigned(certificate.isSigned());
         return response;
     }
 
     @Transactional
-    public void approveCertificate(UUID uid) {
+    public void signCertificate(UUID uid) {
         certificateRepository.findById(uid).ifPresent(certificate -> {
-            certificate.setApproved(true);
+            certificate.setSigned(true);
             certificateRepository.save(certificate);
         });
     }
@@ -92,9 +93,9 @@ public class BonafideService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Certificate has expired");
         }
 
-        if (!certificate.isApproved()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Certificate is not approved yet");
-        }
+        // if (!certificate.isApproved()) {
+        //     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Certificate is not approved yet");
+        // }
 
         byte[] pdfBytes = certificateGenerator.generateCertificate(
             certificate.getStudentName(),
@@ -120,15 +121,28 @@ public class BonafideService {
         }
         
         return certificates.stream()
+            .sorted(Comparator.comparing(BonafideCertificate::getGeneratedAt).reversed())
             .map(cert -> {
                 Map<String, Object> certInfo = new HashMap<>();
                 certInfo.put("uid", cert.getUid());
                 certInfo.put("isActive", cert.isActive());
-                certInfo.put("isApproved", cert.isApproved());
+                certInfo.put("isSigned", cert.isSigned());
                 certInfo.put("generatedAt", cert.getGeneratedAt());
                 certInfo.put("expiresAt", cert.getExpiresAt());
                 return certInfo;
             })
+            .collect(Collectors.toList());
+    }
+
+    public List<BonafideCertificate> getAllCertificates() {
+        List<BonafideCertificate> certificates = certificateRepository.findAll();
+        
+        if (certificates.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No certificates found");
+        }
+        
+        return certificates.stream()
+            .sorted(Comparator.comparing(BonafideCertificate::getGeneratedAt).reversed())
             .collect(Collectors.toList());
     }
 } 

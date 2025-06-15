@@ -1,8 +1,8 @@
-import React from "react"
-import { GeneratedCertificatesPage as GeneratedCertificates } from "../components/generated-certificates-page"
+import React from "react";
+import { GeneratedCertificatesPage as GeneratedCertificates } from "../components/generated-certificates-page";
 
 function GeneratedCertificatesPage() {
-  return <GeneratedCertificates />
+  return <GeneratedCertificates />;
 }
 
-export default GeneratedCertificatesPage
+export default GeneratedCertificatesPage;

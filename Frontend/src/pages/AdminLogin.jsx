@@ -12,18 +12,20 @@ import {
 import { Label } from "@/components/ui/label";
 import { Backpack, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const ROLL_NUMBER_REGEX = /^(LCS|LIT|LCI|LCB)(\d{4})0(0[1-9]|[1-5][0-9]|60)$/i;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
 
-export default function Login() {
+export default function AdminLogin() {
   const [formData, setFormData] = useState({
-    rollno: "",
+    email: "",
+    password: "",
     otp: "",
   });
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [rollNumberError, setRollNumberError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const navigate = useNavigate();
 
   const handleSendOtp = async (e) => {
@@ -38,7 +40,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: formData.rollno + "@iiitl.ac.in" }),
+        body: JSON.stringify({ email: formData.email }),
       });
 
       console.log(response);
@@ -71,13 +73,14 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/login", {
+      const response = await fetch("http://localhost:8080/api/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: formData.rollno + "@iiitl.ac.in",
+          email: formData.email,
+          password: formData.password,
           otp: formData.otp,
         }),
       });
@@ -89,13 +92,15 @@ export default function Login() {
       console.log(response);
 
       const data = await response.json();
+      console.log(data);
 
       if (data.token) {
         sessionStorage.setItem("token", data.token);
         if (data.email) {
           sessionStorage.setItem("email", data.email);
         }
-        navigate("/dashboard", { replace: true });
+        toast.success("Login successful!");
+        navigate("/admin-dashboard", { replace: true });
       } else {
         throw new Error("No token received");
       }
@@ -106,14 +111,16 @@ export default function Login() {
     }
   };
 
-  const validateRollNumber = (rollno) => {
-    if (!ROLL_NUMBER_REGEX.test(rollno)) {
-      setRollNumberError(
-        "Invalid roll number format. Format: LCS/LIT/LCI/LCB + XXXX (year) + 0 + 01-60",
-      );
+  const validateEmail = (email) => {
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError("Invalid email format. Format: admin@iiitl.ac.in");
       return false;
     }
-    setRollNumberError("");
+    if (email.trim().toLowerCase().slice(-12) !== "@iiitl.ac.in") {
+      setEmailError("Email must end with @iiitl.ac.in");
+      return false;
+    }
+    setEmailError("");
     return true;
   };
 
@@ -156,34 +163,33 @@ export default function Login() {
           <CardDescription className="text-center text-muted-foreground">
             {isOtpSent
               ? "Enter the OTP sent to your registered email"
-              : "Enter your roll number to receive OTP"}
+              : "Enter your email to receive OTP"}
           </CardDescription>
         </CardHeader>
         <form onSubmit={isOtpSent ? handleLogin : handleSendOtp}>
           <CardContent className="space-y-4 p-6 relative z-10">
             <div className="space-y-2">
-              <Label htmlFor="rollno" className="text-foreground font-medium">
-                Roll Number
+              <Label htmlFor="email" className="text-foreground font-medium">
+                Email
               </Label>
               <Input
-                id="rollno"
-                type="text"
-                placeholder="e.g., LCS2024039"
-                value={formData.rollno}
+                id="email"
+                type="email"
+                placeholder="e.g., admin@iiitl.ac.in"
+                value={formData.email}
                 onChange={(e) => {
-                  setFormData({ ...formData, rollno: e.target.value });
+                  setFormData({ ...formData, email: e.target.value });
                   if (e.target.value) {
-                    validateRollNumber(e.target.value);
+                    validateEmail(e.target.value);
                   } else {
-                    setRollNumberError("");
+                    setEmailError("");
                   }
                 }}
                 required
-                autoComplete="rollno"
                 disabled={isOtpSent}
-                className={`${rollNumberError ? "border-destructive focus-visible:ring-destructive" : "focus-visible:ring-primary"} transition-colors outline-0 border-0`}
+                className={`${emailError ? "border-destructive focus-visible:ring-destructive" : "focus-visible:ring-primary"} transition-colors outline-0 border-0`}
               />
-              {rollNumberError && (
+              {emailError && (
                 <p className="text-sm text-destructive flex items-center gap-1">
                   <svg
                     className="w-4 h-4"
@@ -199,9 +205,26 @@ export default function Login() {
                       d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  {rollNumberError}
+                  {emailError}
                 </p>
               )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-foreground font-medium">
+                Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => {
+                  setFormData({ ...formData, password: e.target.value });
+                }}
+                required
+                disabled={isOtpSent}
+                className={`focus-visible:ring-primary transition-colors outline-0 border-0`}
+              />
             </div>
             {isOtpSent && (
               <div className="space-y-2">
@@ -245,7 +268,7 @@ export default function Login() {
             <Button
               type="submit"
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 cursor-pointer"
-              disabled={isLoading || (isOtpSent ? false : !!rollNumberError)}
+              disabled={isLoading || (isOtpSent ? false : !!emailError)}
             >
               {isLoading ? (
                 <>
@@ -268,7 +291,7 @@ export default function Login() {
                   setFormData({ ...formData, otp: "" });
                 }}
               >
-                Back to Roll Number
+                Back to Email
               </Button>
             )}
             <div className="text-center text-sm text-muted-foreground">
@@ -277,7 +300,7 @@ export default function Login() {
                 href="#"
                 className="text-primary hover:text-primary/90 transition-colors font-medium"
               >
-                Contact Admin
+                Contact Technician
               </a>
             </div>
           </CardFooter>

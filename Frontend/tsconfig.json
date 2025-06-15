@@ -9,14 +9,13 @@
     }
   ],
   "compilerOptions": {
-    "jsx": "react-jsx",        // ✅ For React 17+ (with automatic JSX runtime)
-    "module": "ESNext",        // Or "ES6"
+    "jsx": "react-jsx", // ✅ For React 17+ (with automatic JSX runtime)
+    "module": "ESNext", // Or "ES6"
     "moduleResolution": "node",
-    "target": "ESNext",        // Or "ES6"
-    "baseUrl": "src",          // Enables `@/` imports
+    "target": "ESNext", // Or "ES6"
+    "baseUrl": "src", // Enables `@/` imports
     "paths": {
       "@/*": ["*"]
-    },
+    }
   }
 }
-  

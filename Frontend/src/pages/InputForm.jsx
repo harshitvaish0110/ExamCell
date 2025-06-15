@@ -1,219 +1,323 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card"
+import React, { useEffect, useMemo, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import Footer from "../components/Footer";
+import { LucideInfo } from "lucide-react";
+import toast from "react-hot-toast";
+// import { useNavigate } from "react-router-dom"
 
 const programCourses = {
-  "B.Tech": ["B.Tech (IT)", "B.Tech (CS)", "B.Tech (CSB)", "B.Tech (CSAI)"],
-  "M.Tech": ["M.Tech (CS)"],
-  "MBA": ["MBA (Digital Business)"],
-  "M.Sc": ["M.Sc. (Data Science)", "M.Sc. (AI & ML)", "M.Sc. (Economics & Management)"],
-  "PhD": ["PhD"]
-}
+  "B.Tech": ["IT", "CS", "CSB", "CSAI"],
+  "M.Tech": ["CS"],
+  MBA: ["Digital Business"],
+  "M.Sc": ["Data Science", "AI & ML", "Economics & Management"],
+  PhD: ["PhD"],
+};
 
 const semesterMap = {
   "B.Tech": 8,
   "M.Tech": 4,
   "M.Sc": 4,
-  "MBA": 4,
-  "PhD": 12
-}
+  MBA: 4,
+  PhD: 12,
+};
 
 const InputForm = () => {
-  const [formData, setFormData] = useState({
-    rollno: "",
-    name: "",
-    email: "",
-    program: "",
-    course: "",
-    semester: "",
-    purpose: ""
-  })
+  // const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  let studentData = JSON.parse(localStorage.getItem("studentData"));
+  let hasDetails = !!studentData;
+
+  const [formData, setFormData] = useState(
+    hasDetails
+      ? studentData
+      : {
+          rollNumber: "",
+          fullName: "",
+          email: "",
+          program: "",
+          course: "",
+          semester: "",
+          purpose: "",
+        },
+  );
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
       ...(name === "program" && { course: "", semester: "" }),
-      ...(name === "course" && { semester: "" })
-    }))
-  }
+      ...(name === "course" && { semester: "" }),
+    }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Form submitted:", formData)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-  const courseOptions = programCourses[formData.program] || []
+    try {
+      const response = await fetch("http://localhost:8080/api/students", {
+        method: hasDetails ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit your data");
+      }
+
+      const data = await response.json();
+      toast.success("Details Submitted Sucessfully");
+      console.log("Form submitted:", data);
+      window.location.href = "/dashboard";
+    } catch (err) {
+      toast.error("Failed to Submit Data");
+      setError(err.message || "Data Submission failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const courseOptions = useMemo(
+    () => programCourses[formData.program] || [],
+    [formData.program],
+  );
   const maxSemester =
     Object.entries(programCourses).find(([prog, list]) =>
-      list.includes(formData.course)
-    )?.[0] || ""
+      list.includes(formData.course),
+    )?.[0] || "";
 
-  const semesterCount = semesterMap[maxSemester] || 0
-  const semesterOptions = Array.from({ length: semesterCount }, (_, i) => i + 1)
+  const semesterCount = semesterMap[maxSemester] || 0;
+  const semesterOptions = Array.from(
+    { length: semesterCount },
+    (_, i) => i + 1,
+  );
+
+  useEffect(() => {
+    const email = sessionStorage.getItem("email").replaceAll('"', "");
+    const rollNumber = email.split("@")[0].toUpperCase();
+    if (rollNumber && email) {
+      setFormData((prev) => ({
+        ...prev,
+        rollNumber,
+        email,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    let selected = courseOptions.filter((course) =>
+      formData.rollNumber.includes(course),
+    );
+    if (selected.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        course: selected[0],
+      }));
+    }
+  }, [formData.rollNumber, courseOptions]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#4B1E1E]">
-      <header className="bg-[oklch(0.3_0.05_350)] text-white py-12 px-4 shadow-md">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <header className="bg-secondary text-foreground rounded-b-[2.5rem] py-10 px-4 shadow-md">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             📝 Student Form
           </h1>
-          <p className="mt-4 text-sm md:text-lg text-[#FCD8D4]">
+          <p className="mt-4 text-base md:text-lg text-muted-foreground">
             Submit student info for certification requests
           </p>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-10">
-        <Card className="w-full max-w-xl bg-white text-[#4B1E1E] shadow-xl border border-[oklch(0.3_0.05_350)] rounded-2xl">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl font-bold">
-              📄 Enter Student Info
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-xl shadow-xl border rounded-2xl bg-card text-card-foreground">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-semibold mb-1">
+              📄{hasDetails ? " Update" : " Submit"} Student Details
             </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Please fill out all fields carefully
+            </p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="text"
-                name="rollno"
-                placeholder="Roll Number"
-                value={formData.rollno}
-                onChange={handleChange}
-                required
-                className="placeholder:text-[#8B5E5E]"
-              />
-              <Input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="placeholder:text-[#8B5E5E]"
-              />
-              <Input
-                type="email"
-                name="email"
-                placeholder="Email ID"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="placeholder:text-[#8B5E5E]"
-              />
-
-              <select
-                name="program"
-                value={formData.program}
-                onChange={handleChange}
-                required
-                className="w-full p-2 rounded-md bg-white border border-[oklch(0.3_0.05_350)] text-[#4B1E1E]"
-              >
-                <option value="">Select Program</option>
-                {Object.keys(programCourses).map((program) => (
-                  <option key={program} value={program}>
-                    {program}
-                  </option>
-                ))}
-              </select>
-
-              {courseOptions.length > 0 && (
-                <select
-                  name="course"
-                  value={formData.course}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-1">
+                <Label htmlFor="rollNumber">Roll Number</Label>
+                <Input
+                  type="text"
+                  name="rollNumber"
+                  id="rollNumber"
+                  placeholder="Enter Roll Number"
+                  value={formData.rollNumber}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 rounded-md bg-white border border-[oklch(0.3_0.05_350)] text-[#4B1E1E]"
+                  disabled
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Enter Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  disabled
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input
+                  type="text"
+                  name="fullName"
+                  id="fullName"
+                  placeholder="Enter Full Name"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="program">Program</Label>
+                <select
+                  name="program"
+                  id="program"
+                  value={formData.program}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-2 rounded-md border bg-background text-foreground"
+                  disabled={isLoading}
                 >
-                  <option value="">Select Course</option>
-                  {courseOptions.map((course) => (
-                    <option key={course} value={course}>
-                      {course}
+                  <option value="">Select Program</option>
+                  {Object.keys(programCourses).map((program) => (
+                    <option key={program} value={program}>
+                      {program}
                     </option>
                   ))}
                 </select>
-              )}
+              </div>
+
+              {courseOptions.length > 0 &&
+                (formData.course ? (
+                  <div className="space-y-1">
+                    <Label htmlFor="course">Course</Label>
+                    <select
+                      name="course"
+                      id="course"
+                      value={formData.course}
+                      required
+                      disabled
+                      className="w-full p-2 rounded-md border bg-background text-foreground"
+                    >
+                      <option value="">Select Course</option>
+                      {courseOptions.map((course) => (
+                        <option key={course} value={course}>
+                          {course}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <Label htmlFor="course">Course</Label>
+                    <select
+                      name="course"
+                      id="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      required
+                      disabled={isLoading}
+                      className="w-full p-2 rounded-md border bg-background text-foreground"
+                    >
+                      <option value="">Select Course</option>
+                      {courseOptions.map((course) => (
+                        <option key={course} value={course}>
+                          {course}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
 
               {semesterOptions.length > 0 && (
-                <select
-                  name="semester"
-                  value={formData.semester}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-2 rounded-md bg-white border border-[oklch(0.3_0.05_350)] text-[#4B1E1E]"
-                >
-                  <option value="">Select Semester</option>
-                  {semesterOptions.map((sem) => (
-                    <option key={sem} value={sem}>
-                      Semester {sem}
-                    </option>
-                  ))}
-                </select>
+                <div className="space-y-1">
+                  <Label htmlFor="semester">Semester</Label>
+                  <select
+                    name="semester"
+                    id="semester"
+                    value={formData.semester}
+                    onChange={handleChange}
+                    required
+                    disabled={isLoading}
+                    className="w-full p-2 rounded-md border bg-background text-foreground"
+                  >
+                    <option value="">Select Semester</option>
+                    {semesterOptions.map((sem) => (
+                      <option key={sem} value={sem}>
+                        Semester {sem}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               )}
 
-              <Input
-                type="text"
-                name="purpose"
-                placeholder="Purpose (e.g., Bonafide, Scholarship)"
-                value={formData.purpose}
-                onChange={handleChange}
-                required
-                className="placeholder:text-[#8B5E5E]"
-              />
+              <div className="space-y-1">
+                <Label htmlFor="purpose">Purpose</Label>
+                <Input
+                  type="text"
+                  name="purpose"
+                  id="purpose"
+                  placeholder="Purpose (e.g. Bonafide, Scholarship)"
+                  value={formData.purpose}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                  required
+                />
+              </div>
+
+              {error && (
+                <p className="text-destructive text-sm text-center flex items-center justify-center gap-1">
+                  <LucideInfo /> {error}
+                </p>
+              )}
 
               <Button
                 type="submit"
-                className="w-full bg-[oklch(0.3_0.05_350)] hover:bg-[oklch(0.3_0.05_350)] text-white"
+                className="w-full text-lg font-semibold py-3"
+                disabled={isLoading}
               >
-                Submit
+                {isLoading ? (
+                  <span className="animate-pulse">Submitting...</span>
+                ) : hasDetails ? (
+                  "Update Details"
+                ) : (
+                  "Submit Details"
+                )}
               </Button>
             </form>
           </CardContent>
         </Card>
       </main>
 
-      <footer className="bg-[oklch(0.3_0.05_350)] text-white py-10 mt-12 rounded-t-[2.5rem] shadow-inner">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-4">
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
-            <ul className="space-y-1 text-[#FCD8D4]">
-              <li className="hover:underline cursor-pointer">Dashboard</li>
-              <li className="hover:underline cursor-pointer">Exam Schedule</li>
-              <li className="hover:underline cursor-pointer">Results</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Contact</h3>
-            <ul className="space-y-1 text-[#FCD8D4]">
-              <li>📧 exam@university.edu</li>
-              <li>📱 (123) 456-7890</li>
-              <li>📍 Main Campus</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Resources</h3>
-            <ul className="space-y-1 text-[#FCD8D4]">
-              <li className="hover:underline cursor-pointer">Help Center</li>
-              <li className="hover:underline cursor-pointer">FAQs</li>
-              <li className="hover:underline cursor-pointer">Support</li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-center mt-6 text-xs text-[#FCD8D4] border-t border-[#FCD8D4] pt-4">
-          © {new Date().getFullYear()} Exam Cell. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default InputForm
+export default InputForm;

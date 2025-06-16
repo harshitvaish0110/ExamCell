@@ -145,4 +145,9 @@ public class BonafideService {
             .sorted(Comparator.comparing(BonafideCertificate::getGeneratedAt).reversed())
             .collect(Collectors.toList());
     }
+
+    public BonafideCertificate getCertificateByUid(UUID uid) {
+        return certificateRepository.findById(uid)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found"));
+    }
 } 

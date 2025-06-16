@@ -4,7 +4,9 @@ import com.login.dto.BonafideRequest;
 import com.login.dto.BonafideResponse;
 import com.login.dto.SignRequest;
 import com.login.entity.BonafideCertificate;
+import com.login.entity.Log;
 import com.login.models.JwtUtil;
+import com.login.repositories.LogRepository;
 import com.login.services.AdminService;
 import com.login.services.BonafideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.UUID;
 // import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -33,6 +37,9 @@ public class BonafideController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private LogRepository logRepository;
+
     @PostMapping("/generate")
     public ResponseEntity<BonafideResponse> generateCertificate(@RequestBody BonafideRequest request) {
         BonafideResponse response = bonafideService.generateCertificate(
@@ -41,6 +48,11 @@ public class BonafideController {
             request.getCourse(),
             request.getSemester(),
             request.getPurpose());
+        Log log = new Log();
+        log.setMessage("Generated Certificate: " + response.getUid() + " for " + response.getEmail());
+        log.setTimestamp(LocalDateTime.now());
+        log.setUser(request.getStudentName());
+        logRepository.save(log);
         return ResponseEntity.ok(response);
     }
 
@@ -88,6 +100,12 @@ public class BonafideController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
         bonafideService.signCertificate(request.getUid());
+        BonafideCertificate cert = bonafideService.getCertificateByUid(request.getUid());
+        Log log = new Log();
+        log.setMessage("Signed Certificate: " + request.getUid() + " by " + cert.getStudentName() + " (" + cert.getEnrollmentNumber() + ")");
+        log.setTimestamp(LocalDateTime.now());
+        log.setUser("Admin");
+        logRepository.save(log);
         return ResponseEntity.ok().build();
     }
 

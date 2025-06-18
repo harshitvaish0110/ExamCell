@@ -44,8 +44,16 @@ const InputForm = () => {
           course: "",
           semester: "",
           purpose: "",
+          mobileNumber: "",
         },
   );
+
+  const mobileNoIsValid = (mobileNo) => {
+    console.log(mobileNo);
+    if (mobileNo.trim()==="") return true;
+    else if ((/^[0-9]{10}$/).test(mobileNo.replaceAll(" ",""))) return true;
+    return false;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -291,6 +299,26 @@ const InputForm = () => {
                 />
               </div>
 
+              <div className="space-y-1">
+                <Label htmlFor="mobileNumber">Mobile Number</Label>
+                <Input
+                  type="text"
+                  name="mobileNumber"
+                  id="mobileNumber"
+                  placeholder="Enter Mobile Number (Optional - For Whatsapp OTP)"
+                  value={formData.mobileNumber}
+                  onChange={(e) => {
+                    if (mobileNoIsValid(e.target.value)) {
+                      setError("");
+                    } else {
+                      setError("Type a Valid Mobile Number")
+                    }
+                    handleChange(e);
+                  }}
+                  disabled={isLoading}
+                />
+              </div>
+
               {error && (
                 <p className="text-destructive text-sm text-center flex items-center justify-center gap-1">
                   <LucideInfo /> {error}
@@ -300,7 +328,7 @@ const InputForm = () => {
               <Button
                 type="submit"
                 className="w-full text-lg font-semibold py-3"
-                disabled={isLoading}
+                disabled={isLoading || error}
               >
                 {isLoading ? (
                   <span className="animate-pulse">Submitting...</span>

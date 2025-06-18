@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import AdminRoute from "./pages/AdminRoute";
 import AdminLogin from "./pages/AdminLogin";
 import Logout from "./pages/Logout";
+import ChangePasswordRequestsPage from "./pages/ChangePasswordRequests";
 
 const App = () => {
   return (
@@ -79,6 +80,14 @@ const App = () => {
               element={
                 <AdminRoute>
                   <History />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/change-password-requests"
+              element={
+                <AdminRoute>
+                  <ChangePasswordRequestsPage />
                 </AdminRoute>
               }
             />

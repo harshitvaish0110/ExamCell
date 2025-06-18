@@ -5,7 +5,6 @@ import com.login.entity.Student;
 import com.login.repositories.LogRepository;
 import com.login.repositories.StudentRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ public class StudentService {
         }
         Log log = new Log();
         log.setMessage("Student Details added: " + student.getEmail());
-        log.setTimestamp(LocalDateTime.now());
         log.setUser(student.getFullName());
         logRepository.save(log);
         return studentRepository.save(student);
@@ -41,7 +39,6 @@ public class StudentService {
         }
         Log log = new Log();
         log.setMessage("Student details updated: " + student.getEmail());
-        log.setTimestamp(LocalDateTime.now());
         log.setUser(student.getFullName());
         logRepository.save(log);
         return studentRepository.save(student);

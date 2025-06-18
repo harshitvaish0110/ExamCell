@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Hourglass, Download } from "lucide-react";
+import { Hourglass, Download, ArrowBigRight, ArrowBigDown, Info } from "lucide-react";
 import Footer from "../components/Footer";
 import { Button } from "../components/ui/button";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader } from "../components/ui/card";
+import { Label } from "@/components/ui/label";
 
 const columns = [
   { key: "request", label: "Requested On", width: "w-2/6" },
@@ -23,6 +25,7 @@ const ExamPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [isChangeReqFormOpen, setIsChangeReqFormOpen] = useState(false);
 
   const fetchUserRequests = async (rollno) => {
     if (!rollno) {
@@ -261,6 +264,21 @@ const ExamPage = () => {
             <p className="text-sm">{error}</p>
           </>
         )}
+
+        <Card className="p-3">
+      <CardHeader 
+        className="flex font-bold p-0 text-lg items-center cursor-pointer"
+        onClick={() => {setIsChangeReqFormOpen(!isChangeReqFormOpen)}}
+      >
+        {
+          isChangeReqFormOpen ? <ArrowBigDown /> : <ArrowBigRight />
+        } Open Change Password Request Form
+      </CardHeader>
+        {
+          isChangeReqFormOpen && (
+            <ChangePasswordForm />
+          )}
+    </Card>
       </main>
 
       {/* Footer */}
@@ -268,5 +286,203 @@ const ExamPage = () => {
     </div>
   );
 };
+
+const ChangePasswordForm = () => {
+  const [pwdReq, setPwdReq] = useState({
+    reason: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const fetchPassReq = async () => {
+    // const token = sessionStorage.getItem('token');
+    const email = sessionStorage.getItem('email');
+    try {
+      let res = await fetch(`http://localhost:8080/api/password-requests/${email}`);
+      if (res.ok) {
+        const data = await res.json();
+        setPwdReq({
+          ...data,
+          confirmPassword: data?.password,
+        });
+        setError("")
+        console.log(data);
+      }
+    } catch (err) {
+      console.log("Some Err ", err);
+    }
+  }
+  const handleSubmit = async (e, type) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("")
+
+    try {
+      const res = await fetch("http://localhost:8080/api/password-requests/" + (type=="create" ? "create" : "delete"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: sessionStorage.getItem('token'),
+          email: sessionStorage.getItem('email'),
+          reason: pwdReq.reason,
+          password: pwdReq.password,
+        }),
+      });
+      console.log(res);
+      if (res.ok) {
+        toast.success("Successfully " + (type=="create" ? "Created" : "Deleted") + " Password Request");
+        if (type == "delete") {
+          setPwdReq({
+              reason: "",
+              password: "",
+              confirmPassword: "",
+            })
+        } else fetchPassReq();
+      } else {
+        toast.error("Failed to " + (type=="create" ? "Create" : "Delete") + " Password Request");
+      }
+    } catch (err) {
+      toast.error("Failed to " + (type=="create" ? "Create" : "Delete") + " Password Request");
+      setError("Failed to " + (type=="create" ? "Create" : "Delete") + " Password Request", err);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  const checksInput = (reason, password, confirmPassword) => {
+    if (reason.length < 20) {
+      setError("Reason should be Bigger");
+    } else if (password.length < 8) {
+      setError("Password should be 8 digits long");
+    } else if (password !== confirmPassword) {
+      setError("Password and Confirm Password should be same");
+    } else {
+      setError("");
+    }
+    setPwdReq({ 
+      ...pwdReq,
+      reason,
+      password,
+      confirmPassword,  
+    });
+  };
+  useEffect(() => {
+    fetchPassReq();
+  }, [])
+  return (
+            <CardContent>
+              {pwdReq?.email
+                ? <div>
+                  <form onSubmit={handleSubmit} className="space-y-2 pb-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="reason">Reason</Label>
+                      <Input
+                        id="reason"
+                        value={pwdReq.reason}
+                        required
+                        onChange={(e) => checksInput(e.target.value, pwdReq.password, pwdReq.confirmPassword)}
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="password">New Password</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        value={pwdReq.password}
+                        required
+                        onChange={(e) => checksInput(pwdReq.reason, e.target.value, pwdReq.confirmPassword)}
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword">Confirm Password</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={pwdReq.confirmPassword}
+                        required
+                        onChange={(e) => checksInput(pwdReq.reason, pwdReq.password, e.target.value)}
+                        disabled={isLoading}
+                      />
+                    </div>
+                    {error && <div className="space-y-2 flex gap-2 text-red-500 items-center">
+                      <Info className="w-4 h-4" /> {error}
+                    </div>}
+                    <div className="space-y-2 flex gap-3 pt-2">
+                      <Button 
+                        type="submit" 
+                        onClick={(e) => handleSubmit(e, "create")}
+                        className="cursor-pointer"
+                        disabled={isLoading || error}
+                      >
+                          Update Request
+                      </Button>
+                      <Button 
+                        type="submit" 
+                        onClick={(e) => handleSubmit(e, "delete")}
+                        className="cursor-pointer"
+                        disabled={isLoading || error}
+                      >
+                          Delete Request
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+                : <form onSubmit={handleSubmit} className="space-y-2 pb-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reason">Reason</Label>
+                    <Input
+                      id="reason"
+                      value={pwdReq.reason}
+                      required
+                      onChange={(e) => checksInput(e.target.value, pwdReq.password, pwdReq.confirmPassword)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">New Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={pwdReq.password}
+                      required
+                      onChange={(e) => checksInput(pwdReq.reason, e.target.value, pwdReq.confirmPassword)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={pwdReq.confirmPassword}
+                      required
+                      onChange={(e) => checksInput(pwdReq.reason, pwdReq.password, e.target.value)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  {error && <div className="space-y-2 flex gap-2 text-red-500 items-center">
+                    <Info className="w-4 h-4" /> {error}
+                  </div>}
+                  <div className="space-y-2 pt-2">
+                    <Button 
+                      type="submit" 
+                      onClick={(e) => handleSubmit(e, "create")}
+                      className="cursor-pointer"
+                      disabled={isLoading || error}
+                    >
+                        Submit
+                    </Button>
+                  </div>
+                </form>
+              }
+            </CardContent>
+  )
+}
 
 export default ExamPage;

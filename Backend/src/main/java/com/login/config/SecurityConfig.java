@@ -28,7 +28,12 @@ public class SecurityConfig {
                     "/api/bonafide/**", 
                     "/api/start-whatsapp-chat",
                     "/api/update-whatsapp",
-                    "/api/verify-whatsapp"
+                    "/api/verify-whatsapp",
+                    "/api/password-requests",
+                    "/api/password-requests/delete",
+                    "/api/password-requests/create",
+                    "/api/password-requests/accept",
+                    "/api/password-requests/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             );

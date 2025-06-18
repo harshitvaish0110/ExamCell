@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { FileText, Home, LogOut, Users, LayoutTemplate } from "lucide-react";
+import { FileText, Home, LogOut, Users, LayoutTemplate, Clock, Key } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 // import { useTheme } from "./theme-provider"
 
@@ -54,10 +54,16 @@ export function DashboardLayout({ children }) {
       isActive: location.pathname === "/templates",
     },
     {
-      title: "Generated Certificates",
-      icon: FileText,
-      url: "/generated-certificates",
-      isActive: location.pathname === "/generated-certificates",
+      title: "History",
+      icon: Clock,
+      url: "/history",
+      isActive: location.pathname === "/history",
+    },
+    {
+      title: "Change Password Requests",
+      icon: Key,
+      url: "/change-password-requests",
+      isActive: location.pathname === "/change-password-requests",
     },
   ];
 

@@ -20,7 +20,6 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -50,7 +49,6 @@ public class BonafideController {
             request.getPurpose());
         Log log = new Log();
         log.setMessage("Generated Certificate: " + response.getUid() + " for " + response.getEmail());
-        log.setTimestamp(LocalDateTime.now());
         log.setUser(request.getStudentName());
         logRepository.save(log);
         return ResponseEntity.ok(response);
@@ -103,7 +101,6 @@ public class BonafideController {
         BonafideCertificate cert = bonafideService.getCertificateByUid(request.getUid());
         Log log = new Log();
         log.setMessage("Signed Certificate: " + request.getUid() + " by " + cert.getStudentName() + " (" + cert.getEnrollmentNumber() + ")");
-        log.setTimestamp(LocalDateTime.now());
         log.setUser("Admin");
         logRepository.save(log);
         return ResponseEntity.ok().build();

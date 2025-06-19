@@ -177,4 +177,12 @@ public class UserService {
         }
         return false;
     }
+
+    public void deleteOtp(String email) {
+        Optional<UserEntity> userEntityOpt = userRepository.findById(email);
+        if (userEntityOpt.isPresent()) {
+            userRepository.delete(userEntityOpt.get());
+            logger.info("Deleted OTP for email: {}", email);
+        }
+    }
 }

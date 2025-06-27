@@ -12,6 +12,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import java.io.File;
+import java.io.FileOutputStream;
 
 @Service
 public class WhatsAppService {
@@ -139,6 +145,61 @@ public class WhatsAppService {
         } catch (Exception e) {
             logger.error("Error sending WhatsApp message: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to send WhatsApp message: " + e.getMessage(), e);
+        }
+    }
+
+    public String getDocumentId(File file) {
+        try {
+            String url = String.format("%s/%s/%s/media", BASE_URL, version, phoneNumberId);
+            HttpHeaders headers = createHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("messaging_product", "whatsapp");
+            body.add("file", new FileSystemResource(file));
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            var response = restTemplate.postForEntity(url, requestEntity, String.class);
+            com.fasterxml.jackson.databind.JsonNode jsonNode = objectMapper.readTree(response.getBody());
+            String mediaId = jsonNode.get("id").asText();
+            return mediaId;
+        } catch (HttpClientErrorException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload document to WhatsApp: " + e.getMessage(), e);
+        }
+    }
+
+    public String sendDocumentMessage(String recipientPhoneNumber, byte[] documentBytes, String filename) {
+        File tempFile = null;
+        try {
+            // Write bytes to a temp file
+            tempFile = File.createTempFile("bonafide", ".pdf");
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(documentBytes);
+            }
+            String mediaId = getDocumentId(tempFile);
+            String url = String.format("%s/%s/%s/messages", BASE_URL, version, phoneNumberId);
+            HttpHeaders headers = createHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("messaging_product", "whatsapp");
+            requestBody.put("recipient_type", "individual");
+            requestBody.put("to", recipientPhoneNumber);
+            requestBody.put("type", "document");
+            Map<String, Object> document = new HashMap<>();
+            document.put("id", mediaId);
+            document.put("filename", filename);
+            requestBody.put("document", document);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            var response = restTemplate.postForEntity(url, entity, String.class);
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send document message: " + e.getMessage(), e);
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
         }
     }
 } 

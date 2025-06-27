@@ -9,6 +9,9 @@ import com.login.models.JwtUtil;
 import com.login.repositories.LogRepository;
 import com.login.services.AdminService;
 import com.login.services.BonafideService;
+import com.login.services.WhatsAppService;
+import com.login.services.StudentService;
+import com.login.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +41,12 @@ public class BonafideController {
 
     @Autowired
     private LogRepository logRepository;
+
+    @Autowired
+    private WhatsAppService whatsAppService;
+
+    @Autowired
+    private StudentService studentService;
 
     @PostMapping("/generate")
     public ResponseEntity<BonafideResponse> generateCertificate(@RequestBody BonafideRequest request) {
@@ -137,6 +146,32 @@ public class BonafideController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
             throw e;
+        }
+    }
+
+    @PostMapping("/send-whatsapp/{uid}")
+    public ResponseEntity<?> sendCertificateViaWhatsApp(
+            @PathVariable UUID uid,
+            @RequestParam(value = "phone", required = false) String phoneNumber) {
+        try {
+            BonafideCertificate cert = bonafideService.getCertificateByUid(uid);
+            if (!cert.isActive()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "error", "message", "Certificate has expired"));
+            }
+            // Try to get phone from param, else from student profile
+            if (phoneNumber == null || phoneNumber.isBlank()) {
+                Student student = studentService.getStudentByEmail(cert.getEnrollmentNumber().toLowerCase() + "@iiitl.ac.in");
+                phoneNumber = student != null ? student.getMobileNumber() : null;
+            }
+            if (phoneNumber == null || phoneNumber.isBlank()) {
+                return ResponseEntity.badRequest().body(Map.of("status", "error", "message", "No phone number provided or found for student."));
+            }
+            byte[] pdfBytes = bonafideService.downloadCertificate(uid).getInputStream().readAllBytes();
+            String filename = cert.getStudentName().replaceAll("\\s+", "_") + "_Bonafide.pdf";
+            whatsAppService.sendDocumentMessage(phoneNumber, pdfBytes, filename);
+            return ResponseEntity.ok(Map.of("status", "success", "message", "Document sent via WhatsApp successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("status", "error", "message", "Failed to send document via WhatsApp: " + e.getMessage()));
         }
     }
 } 

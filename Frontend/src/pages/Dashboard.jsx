@@ -15,6 +15,7 @@ const columns = [
   { key: "request", label: "Requested On", width: "w-2/6" },
   { key: "expire", label: "Expires By", width: "w-2/6" },
   { key: "download", label: "Download", width: "w-1/6" },
+  { key: "whatsapp", label: "WhatsApp", width: "w-1/6" },
   { key: "sign", label: "Signed", width: "w-1/6" },
 ];
 
@@ -206,7 +207,7 @@ const ExamPage = () => {
         {!isLoading && (
           <div className="rounded-2xl border shadow bg-card p-4">
             {/* Header Row */}
-            <div className="grid grid-cols-[2fr_2fr_1fr_1fr] text-sm text-muted-foreground font-semibold border-b">
+            <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr] text-sm text-muted-foreground font-semibold border-b">
               {columns.map((column, idx) => (
                 <div
                   key={column.key}
@@ -227,14 +228,13 @@ const ExamPage = () => {
             {sortedData.map((student, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-[2fr_2fr_1fr_1fr] text-sm border-b hover:bg-muted/70 transition-colors"
+                className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr] text-sm border-b hover:bg-muted/70 transition-colors"
               >
                 <div className="px-4 py-3 font-medium">{student.request}</div>
                 <div className="px-4 py-3 border-l">{student.expire}</div>
                 <div className="px-4 py-3 border-l">
                   <a
                     href={student.download}
-                    // className="text-blue-600 underline hover:text-blue-900 transition-colors"
                     target="_blank"
                   >
                     <Badge
@@ -245,6 +245,38 @@ const ExamPage = () => {
                       Download
                     </Badge>
                   </a>
+                </div>
+                <div className="px-4 py-3 border-l">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-blue-500 text-white border-0 hover:bg-blue-600 cursor-pointer"
+                    onClick={async () => {
+                      const phone = user?.mobileNumber;
+                      if (!phone) {
+                        toast.error('No WhatsApp number found for this student.');
+                        return;
+                      }
+                      try {
+                        const uid = student.download.split('/').pop();
+                        const resp = await fetch(`http://localhost:8080/api/bonafide/send-whatsapp/${uid}`, {
+                          method: 'POST',
+                          headers: {},
+                          body: new URLSearchParams({ phone }),
+                        });
+                        const data = await resp.json();
+                        if (resp.ok && data.status === 'success') {
+                          toast.success('Sent via WhatsApp!');
+                        } else {
+                          toast.error(data.message || 'Failed to send via WhatsApp');
+                        }
+                      } catch (e) {
+                        toast.error('Failed to send via WhatsApp');
+                      }
+                    }}
+                  >
+                    <Download className="w-4 h-4" /> WhatsApp
+                  </Button>
                 </div>
                 <div className="px-4 py-3 border-l">
                   {student.sign ? (

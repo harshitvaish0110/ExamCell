@@ -34,6 +34,24 @@ export function UserManagementTable() {
     }
   };
 
+  const handleRemoveUser = async (rollNumber) => {
+    if (!window.confirm("Are you sure you want to remove this user?")) return;
+    try {
+      let resp = await fetch(`http://localhost:8080/api/admin/students/${rollNumber}`, {
+        method: "DELETE",
+      });
+      if (resp.ok) {
+        setUsers(users.filter((user) => user.rollNumber !== rollNumber));
+        toast.success("User removed successfully");
+      } else {
+        const error = await resp.text();
+        toast.error(error || "Failed to remove user");
+      }
+    } catch (err) {
+      toast.error("Failed to remove user");
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -74,7 +92,7 @@ export function UserManagementTable() {
                         <Eye className="h-4 w-4" />
                         <span className="sr-only">View</span>
                       </Button>
-                      <Button size="icon" variant="outline" className="h-8 w-8">
+                      <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => handleRemoveUser(user.rollNumber)}>
                         <UserX className="h-4 w-4 text-red-500" />
                         <span className="sr-only">Remove</span>
                       </Button>

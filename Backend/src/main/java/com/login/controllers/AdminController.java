@@ -76,4 +76,14 @@ public class AdminController {
                 .header("Content-Type", "text/csv")
                 .body(csvBytes);
     }
+
+    @DeleteMapping("/students/{rollNumber}")
+    public ResponseEntity<?> deleteStudent(@PathVariable String rollNumber) {
+        try {
+            adminService.deleteStudentByRollNumber(rollNumber);
+            return ResponseEntity.ok("Student deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

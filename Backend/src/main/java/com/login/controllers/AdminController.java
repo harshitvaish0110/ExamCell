@@ -66,4 +66,14 @@ public class AdminController {
             .contentType(MediaType.APPLICATION_JSON)
             .body(response);
     }
+
+    @GetMapping("/students/csv")
+    public ResponseEntity<byte[]> downloadStudentsCSV() {
+        byte[] csvBytes = adminService.generateStudentsCSV();
+        return ResponseEntity
+                .ok()
+                .header("Content-Disposition", "attachment; filename=students.csv")
+                .header("Content-Type", "text/csv")
+                .body(csvBytes);
+    }
 }

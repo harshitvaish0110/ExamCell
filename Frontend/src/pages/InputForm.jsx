@@ -35,8 +35,10 @@ const InputForm = () => {
 
   const [formData, setFormData] = useState(
     hasDetails
-      ? studentData
-      : {
+      ? {
+        ...studentData,
+        mobileNumber: studentData.mobileNumber ? studentData.mobileNumber.slice(2) : ""
+      } : {
           rollNumber: "",
           fullName: "",
           email: "",

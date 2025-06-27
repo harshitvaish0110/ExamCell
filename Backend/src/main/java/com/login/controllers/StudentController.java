@@ -27,6 +27,9 @@ public class StudentController {
             Student student = new Student();
             student.setEmail(request.getEmail().toLowerCase());
             student.setMobileNumber(request.getMobileNumber());
+            if (student.getMobileNumber() && student.getMobileNumber().length() == 10) {
+                student.setMobileNumber("91" + student.getMobileNumber());
+            }
             student.setRollNumber(request.getRollNumber());
             student.setFullName(request.getFullName());
             student.setProgram(request.getProgram());
@@ -47,6 +50,9 @@ public class StudentController {
             Student student = new Student();
             student.setEmail(request.getEmail().toLowerCase());
             student.setMobileNumber(request.getMobileNumber());
+            if (student.getMobileNumber() && student.getMobileNumber().length() == 10) {
+                student.setMobileNumber("91" + student.getMobileNumber());
+            }
             student.setRollNumber(request.getRollNumber());
             student.setFullName(request.getFullName());
             student.setProgram(request.getProgram());

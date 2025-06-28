@@ -24,12 +24,19 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">Contact</h3>
           <ul className="space-y-1">
-            <li>📧 exam@university.edu</li>
-            <li>📱 (123) 456-7890</li>
-            <li>📍 Main Campus</li>
+            <li>
+              Indian Institute of Information Technology, Lucknow
+            </li>
+            <li>
+              Chak Ganjaria, C. G. City, Lucknow, Uttar Pradesh 226002
+            </li>
+            <li>
+              Email: <a href="mailto:contact@iiitl.ac.in" className="hover:underline">contact@iiitl.ac.in</a>
+            </li>
+
           </ul>
         </div>
-        <div>
+        <div className="text-right">
           <h3 className="text-lg font-semibold mb-3 text-primary">Resources</h3>
           <ul className="space-y-1">
             <li className="hover:underline cursor-pointer">Help Center</li>
@@ -40,7 +47,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center mt-6 text-xs border-t pt-4">
-        © {new Date().getFullYear()} Exam Cell. All rights reserved.
+        © {new Date().getFullYear()} IIIT Lucknow. All rights reserved.
       </div>
     </footer>
   );

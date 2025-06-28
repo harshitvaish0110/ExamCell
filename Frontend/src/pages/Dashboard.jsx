@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Hourglass, Download, ArrowBigRight, ArrowBigDown, Info } from "lucide-react";
+import { Hourglass, Download, ArrowBigRight, ArrowBigDown, Info, LogOut, CheckCircle, XCircle } from "lucide-react";
 import Footer from "../components/Footer";
 import { Button } from "../components/ui/button";
 import toast from "react-hot-toast";
@@ -11,13 +11,15 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "../components/ui/card";
 import { Label } from "@/components/ui/label";
 
+// Define column widths for perfect sync
+const columnWidths = ['180px', '180px', '1fr', '140px', '140px', '160px'];
 const columns = [
-  { key: "request", label: "Requested On", width: "w-2/6" },
-  { key: "expire", label: "Expires By", width: "w-2/6" },
-  { key: "purpose", label: "Purpose", width: "w-2/6" },
-  { key: "download", label: "Download", width: "w-1/6" },
-  { key: "whatsapp", label: "WhatsApp", width: "w-1/6" },
-  { key: "sign", label: "Signed", width: "w-1/6" },
+  { key: "request", label: "Requested On" },
+  { key: "expire", label: "Expires By" },
+  { key: "purpose", label: "Purpose" },
+  { key: "download", label: "Download" },
+  { key: "whatsapp", label: "WhatsApp" },
+  { key: "sign", label: "Signed" },
 ];
 
 const ExamPage = () => {
@@ -166,10 +168,18 @@ const ExamPage = () => {
     }
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("email");
+    localStorage.removeItem("studentData");
+    toast.success("Logged Out Successfully");
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="bg-secondary rounded-b-[2.5rem] text-foreground py-12 px-4 shadow-md">
+      <header className="bg-secondary rounded-b-[2.5rem] text-foreground py-12 px-4 shadow-md relative">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             🎓 Exam Cell
@@ -177,6 +187,18 @@ const ExamPage = () => {
           <p className="mt-4 text-sm md:text-lg text-primary">
             Manage and Monitor Examinations Efficiently
           </p>
+        </div>
+        
+        {/* Logout Button */}
+        <div className="absolute top-4 right-4">
+          <Button
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center gap-2 font-semibold"
+            variant="destructive"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </Button>
         </div>
       </header>
 
@@ -209,11 +231,11 @@ const ExamPage = () => {
         {!isLoading && (
           <div className="rounded-2xl border shadow bg-card p-4">
             {/* Header Row */}
-            <div className="grid grid-cols-[2fr_2fr_2fr_1fr_1fr_1fr] text-sm text-muted-foreground font-semibold border-b">
+            <div className="grid border-b text-sm text-muted-foreground font-semibold" style={{gridTemplateColumns: columnWidths.join(' ')}}>
               {columns.map((column, idx) => (
                 <div
                   key={column.key}
-                  className={`px-4 py-3 flex items-center justify-between ${idx !== 0 ? "border-l" : ""} cursor-pointer`}
+                  className={`px-4 py-3 flex items-center justify-between ${idx !== 0 ? "border-l" : ""} ${['download','whatsapp','sign'].includes(column.key) ? 'whitespace-nowrap' : ''}`}
                   onClick={() => requestSort(column.key)}
                 >
                   <span>{column.label}</span>
@@ -230,30 +252,32 @@ const ExamPage = () => {
             {sortedData.map((student, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-[2fr_2fr_2fr_1fr_1fr_1fr] text-sm border-b hover:bg-muted/70 transition-colors"
+                className="grid border-b hover:bg-muted/70 transition-colors"
+                style={{gridTemplateColumns: columnWidths.join(' ')}}
               >
                 <div className="px-4 py-3 font-medium">{student.request}</div>
                 <div className="px-4 py-3 border-l">{student.expire}</div>
                 <div className="px-4 py-3 border-l">{student.purpose}</div>
-                <div className="px-4 py-3 border-l">
+                <div className="px-4 py-3 border-l whitespace-nowrap">
                   <a
                     href={student.download}
                     target="_blank"
                   >
-                    <Badge
-                      variant="success"
-                      className="flex items-center gap-1"
+                    <Button
+                      size="sm"
+                      className="bg-gradient-to-r from-green-400 to-green-600 text-white border-0 shadow-md rounded-full hover:from-green-500 hover:to-green-700 transition-all duration-200 flex items-center gap-2 px-4 py-2"
+                      style={{ minWidth: 100 }}
                     >
-                      <Download className="w-4 h-4" />
+                      <Download className="w-4 h-4 mr-1" />
                       Download
-                    </Badge>
+                    </Button>
                   </a>
                 </div>
-                <div className="px-4 py-3 border-l">
+                <div className="px-4 py-3 border-l whitespace-nowrap">
                   <Button
                     size="sm"
-                    variant="outline"
-                    className="bg-blue-500 text-white border-0 hover:bg-blue-600 cursor-pointer"
+                    className="bg-gradient-to-r from-blue-400 to-blue-600 text-white border-0 shadow-md rounded-full hover:from-blue-500 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 px-4 py-2"
+                    style={{ minWidth: 100 }}
                     onClick={async () => {
                       const phone = user?.mobileNumber;
                       if (!phone) {
@@ -278,14 +302,18 @@ const ExamPage = () => {
                       }
                     }}
                   >
-                    <Download className="w-4 h-4" /> WhatsApp
+                    <Download className="w-4 h-4 mr-1" /> WhatsApp
                   </Button>
                 </div>
-                <div className="px-4 py-3 border-l">
+                <div className="px-4 py-3 border-l whitespace-nowrap">
                   {student.sign ? (
-                    <Badge variant="secondary">Signed</Badge>
+                    <span className="inline-flex items-center gap-1 bg-gradient-to-r from-emerald-400 to-emerald-600 text-white font-semibold rounded-full px-5 py-1 shadow-md whitespace-nowrap">
+                      <CheckCircle className="w-4 h-4" /> Signed
+                    </span>
                   ) : (
-                    <Badge variant="destructive">Not Signed</Badge>
+                    <span className="inline-flex items-center gap-1 bg-gradient-to-r from-red-400 to-red-600 text-white font-semibold rounded-full px-5 py-1 shadow-md whitespace-nowrap">
+                      <XCircle className="w-4 h-4" /> Not Signed
+                    </span>
                   )}
                 </div>
               </div>

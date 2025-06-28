@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -60,8 +61,7 @@ public class AdminController {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginWithOtpAndPassword(@RequestBody LoginRequest request) {
-        JwtResponse response = userService.authenticateAdminWithOtpAndPassword(request.getEmail(), request.getPassword(), request.getOtp());
-        
+        JwtResponse response = adminService.authenticateAdminWithOtpAndPassword(request.getEmail(), request.getPassword(), request.getOtp());
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(response);
@@ -85,5 +85,16 @@ public class AdminController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/request-otp")
+    public ResponseEntity<?> requestAdminOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        String otp = adminService.generateOtp(email);
+        adminService.sendLoginOtp(email, otp);
+        return ResponseEntity.ok("OTP sent to admin's registered mobile number or email.");
     }
 }

@@ -35,7 +35,7 @@ export default function AdminLogin() {
 
     try {
       // TODO: Replace with your actual API endpoint
-      const response = await fetch("http://localhost:8080/api/request-otp", {
+      const response = await fetch("http://localhost:8080/api/admin/request-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

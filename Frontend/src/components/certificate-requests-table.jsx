@@ -99,53 +99,19 @@ export function CertificateRequestsTable() {
                   <TableCell>{request.studentName}</TableCell>
                   <TableCell>{`${new Date(request.generatedAt).toLocaleDateString()} - ${new Date(request.generatedAt).toTimeString().slice(0, 8)}`}</TableCell>
                   <TableCell>
-                    {
-                      <>
-                        <a
-                          href={`http://localhost:8080/api/bonafide/download/${request.uid}`}
-                          target="_blank"
-                        >
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="bg-green-500 text-white border-0 hover:bg-green-600 cursor-pointer"
-                          >
-                            <Download className="h-4 w-4 mr-1" />
-                            Download
-                          </Button>
-                        </a>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="bg-blue-500 text-white border-0 hover:bg-blue-600 cursor-pointer ml-2"
-                          onClick={async () => {
-                            const phone = request.mobileNumber;
-                            if (!phone) {
-                              toast.error('No WhatsApp number found for this student.');
-                              return;
-                            }
-                            try {
-                              const resp = await fetch(`http://localhost:8080/api/bonafide/send-whatsapp/${request.uid}`, {
-                                method: 'POST',
-                                headers: { },
-                                body: new URLSearchParams({ phone }),
-                              });
-                              const data = await resp.json();
-                              if (resp.ok && data.status === 'success') {
-                                toast.success('Sent via WhatsApp!');
-                              } else {
-                                toast.error(data.message || 'Failed to send via WhatsApp');
-                              }
-                            } catch (e) {
-                              toast.error('Failed to send via WhatsApp');
-                            }
-                          }}
-                        >
-                          <Download className="h-4 w-4 mr-1" />
-                          WhatsApp
-                        </Button>
-                      </>
-                    }
+                    <a
+                      href={`http://localhost:8080/api/bonafide/download/${request.uid}`}
+                      target="_blank"
+                    >
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="bg-green-500 text-white border-0 hover:bg-green-600 cursor-pointer"
+                      >
+                        <Download className="h-4 w-4 mr-1" />
+                        Download
+                      </Button>
+                    </a>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">

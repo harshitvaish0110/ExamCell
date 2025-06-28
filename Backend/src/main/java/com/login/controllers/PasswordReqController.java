@@ -49,6 +49,21 @@ public class PasswordReqController {
             .body(passwordReqRepository.findAll());
     }
 
+    @GetMapping("/export-csv")
+    public ResponseEntity<?> exportPasswordRequestsCSV() {
+        try {
+            byte[] csvData = adminService.generatePasswordRequestsCSV();
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .header("Content-Disposition", "attachment; filename=\"password_requests.csv\"")
+                .body(csvData);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("Error generating CSV: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/{email}")
     public ResponseEntity<?> getPasswordRequest(@PathVariable String email) {
         if (email == null || email.isEmpty()) {

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 const columns = [
   { key: "request", label: "Requested On", width: "w-2/6" },
   { key: "expire", label: "Expires By", width: "w-2/6" },
+  { key: "purpose", label: "Purpose", width: "w-2/6" },
   { key: "download", label: "Download", width: "w-1/6" },
   { key: "whatsapp", label: "WhatsApp", width: "w-1/6" },
   { key: "sign", label: "Signed", width: "w-1/6" },
@@ -64,6 +65,7 @@ const ExamPage = () => {
             expire: expDt,
             download: "http://localhost:8080/api/bonafide/download/" + req.uid,
             sign: req.isSigned,
+            purpose: req.purpose,
           };
         }),
       );
@@ -207,7 +209,7 @@ const ExamPage = () => {
         {!isLoading && (
           <div className="rounded-2xl border shadow bg-card p-4">
             {/* Header Row */}
-            <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr] text-sm text-muted-foreground font-semibold border-b">
+            <div className="grid grid-cols-[2fr_2fr_2fr_1fr_1fr_1fr] text-sm text-muted-foreground font-semibold border-b">
               {columns.map((column, idx) => (
                 <div
                   key={column.key}
@@ -228,10 +230,11 @@ const ExamPage = () => {
             {sortedData.map((student, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr] text-sm border-b hover:bg-muted/70 transition-colors"
+                className="grid grid-cols-[2fr_2fr_2fr_1fr_1fr_1fr] text-sm border-b hover:bg-muted/70 transition-colors"
               >
                 <div className="px-4 py-3 font-medium">{student.request}</div>
                 <div className="px-4 py-3 border-l">{student.expire}</div>
+                <div className="px-4 py-3 border-l">{student.purpose}</div>
                 <div className="px-4 py-3 border-l">
                   <a
                     href={student.download}

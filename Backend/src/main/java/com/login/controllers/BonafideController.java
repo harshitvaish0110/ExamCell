@@ -50,12 +50,15 @@ public class BonafideController {
 
     @PostMapping("/generate")
     public ResponseEntity<BonafideResponse> generateCertificate(@RequestBody BonafideRequest request) {
+        // Fetch student by email to get the purpose
+        Student student = studentService.getStudentByEmail(request.getEmail());
+        String purpose = student != null ? student.getPurpose() : null;
         BonafideResponse response = bonafideService.generateCertificate(
             request.getStudentName(),
             request.getEmail(),
             request.getCourse(),
             request.getSemester(),
-            request.getPurpose());
+            purpose);
         Log log = new Log();
         log.setMessage("Generated Certificate: " + response.getUid() + " for " + response.getEmail());
         log.setUser(request.getStudentName());

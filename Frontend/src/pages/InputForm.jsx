@@ -289,16 +289,21 @@ const InputForm = () => {
 
               <div className="space-y-1">
                 <Label htmlFor="purpose">Purpose</Label>
-                <Input
-                  type="text"
+                <select
                   name="purpose"
                   id="purpose"
-                  placeholder="Purpose (e.g. Bonafide, Scholarship)"
                   value={formData.purpose}
                   onChange={handleChange}
-                  disabled={isLoading}
                   required
-                />
+                  disabled={isLoading}
+                  className="w-full p-2 rounded-md border bg-background text-foreground"
+                >
+                  <option value="">Select Purpose</option>
+                  <option value="Scholarship">Scholarship</option>
+                  <option value="Loan">Loan</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Job">Job</option>
+                </select>
               </div>
 
               <div className="space-y-1">

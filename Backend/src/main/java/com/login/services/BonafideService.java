@@ -129,6 +129,7 @@ public class BonafideService {
                 certInfo.put("isSigned", cert.isSigned());
                 certInfo.put("generatedAt", cert.getGeneratedAt());
                 certInfo.put("expiresAt", cert.getExpiresAt());
+                certInfo.put("purpose", cert.getPurpose());
                 return certInfo;
             })
             .collect(Collectors.toList());

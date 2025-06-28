@@ -80,6 +80,9 @@ export function CertificateRequestsTable() {
                   Name
                 </TableHead>
                 <TableHead className="text-[#ffe2f3] text-bold tracking-wide">
+                  Purpose
+                </TableHead>
+                <TableHead className="text-[#ffe2f3] text-bold tracking-wide">
                   Date Requested
                 </TableHead>
                 <TableHead className="text-[#ffe2f3] text-bold tracking-wide">
@@ -97,6 +100,7 @@ export function CertificateRequestsTable() {
                     {request.enrollmentNumber}
                   </TableCell>
                   <TableCell>{request.studentName}</TableCell>
+                  <TableCell>{request.purpose}</TableCell>
                   <TableCell>{`${new Date(request.generatedAt).toLocaleDateString()} - ${new Date(request.generatedAt).toTimeString().slice(0, 8)}`}</TableCell>
                   <TableCell>
                     <a

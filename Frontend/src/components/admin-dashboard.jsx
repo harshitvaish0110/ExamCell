@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { CertificateRequestsTable } from "./certificate-requests-table";
 import { LogsSection } from "./logs-section";
 import { StatsCards } from "./stats-cards";
@@ -7,6 +7,8 @@ import { UserManagementTable } from "./user-management-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export function AdminDashboard() {
+  const [statsRefresh, setStatsRefresh] = useState(0);
+  const handleStatsRefresh = useCallback(() => setStatsRefresh(r => r + 1), []);
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -18,7 +20,7 @@ export function AdminDashboard() {
         </p>
       </div>
 
-      <StatsCards />
+      <StatsCards refresh={statsRefresh} />
 
       <Tabs defaultValue="requests" className="w-full">
         <TabsList className="grid w-full grid-cols-3 md:w-auto bg-primary/10">
@@ -42,7 +44,7 @@ export function AdminDashboard() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="requests" className="mt-4">
-          <CertificateRequestsTable />
+          <CertificateRequestsTable onSigned={handleStatsRefresh} />
         </TabsContent>
         <TabsContent value="templates" className="mt-4">
           <TemplatesTable />

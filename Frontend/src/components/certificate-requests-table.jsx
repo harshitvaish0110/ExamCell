@@ -14,7 +14,7 @@ import {
 } from "./ui/table";
 import toast from "react-hot-toast";
 
-export function CertificateRequestsTable() {
+export function CertificateRequestsTable({ onSigned }) {
   let [isLoading, setIsLoading] = useState(false);
   let [certificateRequests, setCertificateRequests] = useState(null);
   const [searchRoll, setSearchRoll] = useState("");
@@ -34,6 +34,7 @@ export function CertificateRequestsTable() {
       if (resp.ok) {
         toast.success("Signed Certificate Successfully");
         fetchCertificates();
+        if (onSigned) onSigned();
       } else {
         toast.error("Failed to Sign Certificate");
       }

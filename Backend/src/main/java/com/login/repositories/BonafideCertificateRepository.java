@@ -15,4 +15,7 @@ public interface BonafideCertificateRepository extends JpaRepository<BonafideCer
     Optional<BonafideCertificate> findByEnrollmentNumber(String enrollmentNumber);
     
     List<BonafideCertificate> findAllByEnrollmentNumber(String enrollmentNumber);
+
+    long countByIsSignedFalse();
+    long countByIsSignedTrue();
 } 

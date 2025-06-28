@@ -97,4 +97,9 @@ public class AdminController {
         adminService.sendLoginOtp(email, otp);
         return ResponseEntity.ok("OTP sent to admin's registered mobile number or email.");
     }
+
+    @GetMapping("/dashboard-stats")
+    public ResponseEntity<?> getDashboardStats() {
+        return ResponseEntity.ok(adminService.getDashboardStats());
+    }
 }

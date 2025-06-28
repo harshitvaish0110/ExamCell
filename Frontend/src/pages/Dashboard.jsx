@@ -156,6 +156,7 @@ const ExamPage = () => {
         const data = await resp.json();
         toast.success("Certificate Request Submitted sucessfully");
         fetchUserRequests(user.rollNumber);
+        window.dispatchEvent(new Event("certificate-requested"));
         console.log(data);
       } catch (err) {
         console.log(err);

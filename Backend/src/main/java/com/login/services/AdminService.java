@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -271,6 +273,15 @@ public class AdminService {
         }
     }
 
+    public Map<String, Long> getDashboardStats() {
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("totalStudents", studentRepository.count());
+        stats.put("totalCertificates", bonafideCertificateRepository.count());
+        stats.put("pendingRequests", bonafideCertificateRepository.countByIsSignedFalse());
+        stats.put("approvedToday", 0L); // Placeholder, implement logic if needed
+        return stats;
+    }
+
     public String generateOtp(String email) {
         if (!IIITL_EMAIL_PATTERN.matcher(email).matches()) {
             throw new IllegalArgumentException("Email must end with @iiitl.ac.in");
@@ -387,6 +398,6 @@ public class AdminService {
             }
         } else {
             return new JwtResponse(null, email, "Invalid OTP!");
-        }
+        } 
     }
 } 

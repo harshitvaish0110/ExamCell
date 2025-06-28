@@ -15,4 +15,5 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     String getUsernameByEmail(String email);
     void deleteByRollNumber(String rollNumber);
     Student findByRollNumber(String rollNumber);
+    long count();
 }

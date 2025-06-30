@@ -14,6 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.and())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/logs",
@@ -22,6 +23,8 @@ public class SecurityConfig {
                     "/api/login", 
                     "/api/students",
                     "/api/students/**",
+                    "/api/student/**",
+                    "/api/test/**",
                     "/api/admin/login",
                     "/api/admin/**",
                     "/api/bonafide/sign",

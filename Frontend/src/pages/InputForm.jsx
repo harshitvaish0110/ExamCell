@@ -141,7 +141,7 @@ const InputForm = () => {
       <header className="bg-secondary text-foreground rounded-b-[2.5rem] py-10 px-4 shadow-md">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            📝 Student Form
+            Student Form
           </h1>
           <p className="mt-4 text-base md:text-lg text-muted-foreground">
             Submit student info for certification requests
@@ -153,7 +153,7 @@ const InputForm = () => {
         <Card className="w-full max-w-xl shadow-xl border rounded-2xl bg-card text-card-foreground">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-semibold mb-1">
-              📄{hasDetails ? " Update" : " Submit"} Student Details
+              {hasDetails ? " Update" : " Submit"} Student Details
             </CardTitle>
             <p className="text-sm text-muted-foreground">
               Please fill out all fields carefully

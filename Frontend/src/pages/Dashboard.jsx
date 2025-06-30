@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Hourglass, Download, ArrowBigRight, ArrowBigDown, Info, LogOut, CheckCircle, XCircle } from "lucide-react";
+import { Hourglass, Download, ArrowBigRight, ArrowBigDown, Info, LogOut, CheckCircle, XCircle, Mail } from "lucide-react";
 import Footer from "../components/Footer";
 import { Button } from "../components/ui/button";
 import toast from "react-hot-toast";
@@ -12,12 +12,13 @@ import { Card, CardContent, CardHeader } from "../components/ui/card";
 import { Label } from "@/components/ui/label";
 
 // Define column widths for perfect sync
-const columnWidths = ['180px', '180px', '1fr', '140px', '140px', '160px'];
+const columnWidths = ['160px', '160px', '190px', '170px','170px', '170px', '200px'];
 const columns = [
   { key: "request", label: "Requested On" },
   { key: "expire", label: "Expires By" },
   { key: "purpose", label: "Purpose" },
   { key: "download", label: "Download" },
+  { key: "download", label: "E-Mail" },
   { key: "whatsapp", label: "WhatsApp" },
   { key: "sign", label: "Signed" },
 ];
@@ -183,7 +184,7 @@ const ExamPage = () => {
       <header className="bg-secondary rounded-b-[2.5rem] text-foreground py-12 px-4 shadow-md relative">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            🎓 Exam Cell
+             Exam Cell
           </h1>
           <p className="mt-4 text-sm md:text-lg text-primary">
             Manage and Monitor Examinations Efficiently
@@ -273,6 +274,34 @@ const ExamPage = () => {
                       Download
                     </Button>
                   </a>
+                </div>
+                <div className="px-4 py-3 border-l whitespace-nowrap">
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-purple-400 to-purple-600 text-white border-0 shadow-md rounded-full hover:from-purple-500 hover:to-purple-700 transition-all duration-200 flex items-center gap-2 px-4 py-2"
+                    style={{ minWidth: 100 }}
+                    onClick={async () => {
+                      try {
+                        const uid = student.download.split('/').pop();
+                        const email = user?.email;
+                        const resp = await fetch(`http://localhost:8080/api/bonafide/send-email/${uid}`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email }),
+                        });
+                        const data = await resp.json();
+                        if (resp.ok && data.status === 'success') {
+                          toast.success('Sent to your email!');
+                        } else {
+                          toast.error(data.message || 'Failed to send email');
+                        }
+                      } catch (e) {
+                        toast.error('Failed to send email');
+                      }
+                    }}
+                  >
+                    <Mail className="w-4 h-4 mr-1" />Send to Email
+                  </Button>
                 </div>
                 <div className="px-4 py-3 border-l whitespace-nowrap">
                   <Button

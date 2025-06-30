@@ -12,6 +12,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Backpack, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { generateToken } from "@/notification/firebase";
 
 const ROLL_NUMBER_REGEX = /^(LCS|LIT|LCI|LCB)(\d{4})0(0[1-9]|[1-5][0-9]|60)$/i;
 
@@ -95,6 +96,15 @@ export default function Login() {
         if (data.email) {
           sessionStorage.setItem("email", data.email);
         }
+        
+        // Register Firebase token for notifications
+        try {
+          await generateToken(formData.rollno + "@iiitl.ac.in");
+        } catch (firebaseError) {
+          console.error("Failed to register Firebase token:", firebaseError);
+          // Don't block login if Firebase fails
+        }
+        
         navigate("/dashboard", { replace: true });
       } else {
         throw new Error("No token received");

@@ -16,11 +16,13 @@ import AdminRoute from "./pages/AdminRoute";
 import AdminLogin from "./pages/AdminLogin";
 import Logout from "./pages/Logout";
 import ChangePasswordRequestsPage from "./pages/ChangePasswordRequests";
+import NotificationHandler from "./components/NotificationHandler";
 
 const App = () => {
   return (
     <ThemeProvider defaultTheme="system" storageKey="exam-cell-theme">
       <Toaster reverseOrder={false} position="top-right" />
+      <NotificationHandler />
       <BrowserRouter>
         {
           <Routes>

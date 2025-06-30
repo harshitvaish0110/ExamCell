@@ -20,10 +20,16 @@ export function CertificateRequestsTable({ onSigned }) {
   const [searchRoll, setSearchRoll] = useState("");
 
   const signCertificate = async (uid) => {
+    console.log("Sign certificate request initiated for UID:", uid);
     setIsLoading(true);
     let token = sessionStorage.getItem("token");
     let email = sessionStorage.getItem("email");
+    
+    console.log("Token present:", !!token);
+    console.log("Email:", email);
+    
     try {
+      console.log(" Sending sign request to backend...");
       let resp = await fetch("http://localhost:8080/api/bonafide/sign", {
         method: "POST",
         headers: {
@@ -31,15 +37,21 @@ export function CertificateRequestsTable({ onSigned }) {
         },
         body: JSON.stringify({ uid, token, email }),
       });
+      
+      console.log(" Backend response status:", resp.status);
+      
       if (resp.ok) {
+        console.log("Certificate signed successfully");
         toast.success("Signed Certificate Successfully");
         fetchCertificates();
         if (onSigned) onSigned();
       } else {
+        const errorText = await resp.text();
+        console.error("Failed to sign certificate. Status:", resp.status, "Error:", errorText);
         toast.error("Failed to Sign Certificate");
       }
     } catch (err) {
-      console.log(err);
+      console.error("Error signing certificate:", err);
       toast.error("Failed to Sign Certificate");
     } finally {
       setIsLoading(false);

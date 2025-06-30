@@ -7,8 +7,7 @@ export function StatsCards({ refresh, onLoaded }) {
   const [statsData, setStatsData] = useState({
     totalStudents: 0,
     totalCertificates: 0,
-    pendingRequests: 0,
-    approvedToday: 0,
+    pendingRequests: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -53,15 +52,7 @@ export function StatsCards({ refresh, onLoaded }) {
       icon: BarChart3,
       iconColor: "text-[#ffe2f3]",
       iconBg: "bg-primary",
-    },
-    {
-      title: "Approved Today",
-      value: loading ? "..." : statsData.approvedToday,
-      description: "Certificates issued",
-      icon: CheckCircle,
-      iconColor: "text-[#ffe2f3]",
-      iconBg: "bg-primary",
-    },
+    }
   ];
 
   return (

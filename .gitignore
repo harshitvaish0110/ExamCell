@@ -1,0 +1,52 @@
+# Root level .gitignore for ExamCell project
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Firebase
+**/firebase-service-account.json
+**/firebase-config.json
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Build outputs
+**/target/
+**/dist/
+**/build/
+**/node_modules/
+
+# Application properties with sensitive data
+**/application-prod.properties
+**/application-dev.properties 

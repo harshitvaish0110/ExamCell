@@ -78,7 +78,8 @@ const History = () => {
         throw new Error("Failed to fetch logs");
       }
       const data = await response.json();
-      setLogData(data);
+      const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      setLogData(sortedData);
       toast.success("Logs fetched successfully");
     } catch (error) {
       console.error(error);

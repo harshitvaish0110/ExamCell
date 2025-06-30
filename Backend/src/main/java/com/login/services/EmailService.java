@@ -6,6 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class EmailService {
@@ -60,6 +66,20 @@ public class EmailService {
             
         } catch (Exception e) {
             logger.error("Failed to send welcome email: {}", e.getMessage());
+        }
+    }
+
+    public void sendCertificate(String toEmail, byte[] pdfBytes, String filename) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Your Bonafide Certificate");
+            helper.setText("Please find your certificate attached.", false);
+            helper.addAttachment(filename, new ByteArrayResource(pdfBytes));
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email", e);
         }
     }
     

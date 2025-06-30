@@ -4,6 +4,7 @@ import com.login.entity.Student;
 import com.login.services.StudentService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/students")
@@ -80,6 +82,31 @@ public class StudentController {
             return ResponseEntity.ok(student);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/update-firebase-token")
+    public ResponseEntity<?> updateFirebaseToken(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String firebaseToken = request.get("firebaseToken");
+            
+            if (email == null || firebaseToken == null) {
+                return ResponseEntity.badRequest().body(Map.of("status", "error", "message", "Email and firebaseToken are required"));
+            }
+            
+            Student student = studentService.getStudentByEmail(email);
+            if (student == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            student.setFirebaseToken(firebaseToken);
+            studentService.updateStudent(student);
+            
+            return ResponseEntity.ok(Map.of("status", "success", "message", "Firebase token updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("status", "error", "message", "Failed to update Firebase token: " + e.getMessage()));
+        }
     }
 
     private static class StudentRequest {

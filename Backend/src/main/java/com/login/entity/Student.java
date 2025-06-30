@@ -31,4 +31,7 @@ public class Student {
 
     @Column(nullable = false)
     private String purpose;
+
+    @Column(columnDefinition = "TEXT")
+    private String firebaseToken;
 } 

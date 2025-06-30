@@ -88,10 +88,6 @@ export function UserManagementTable() {
                   <TableCell>{`${user.program} (${user.course})`}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button size="icon" variant="outline" className="h-8 w-8">
-                        <Eye className="h-4 w-4" />
-                        <span className="sr-only">View</span>
-                      </Button>
                       <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => handleRemoveUser(user.rollNumber)}>
                         <UserX className="h-4 w-4 text-red-500" />
                         <span className="sr-only">Remove</span>
